@@ -81,9 +81,6 @@ public class dualmode {
 		panel_serial.setToolTipText("Serial");
 		frmDualmode.getContentPane().add(panel_serial, BorderLayout.NORTH);
 	    String[] ports = SerialPortList.getPortNames();
-//	        for(String port : ports){
-//	            jComboBoxPortName.addItem(port);
-//	        }
 		
 		JLabel lblNewLabel = new JLabel("New label");
 		panel_serial.add(lblNewLabel);
@@ -147,6 +144,9 @@ public class dualmode {
         SerialParams.setStopbits(SerialPort.STOPBITS_1);
         SerialParams.setEncoding(Modbus.SERIAL_ENCODING_RTU);
         SerialParams.setEcho(false);
+        for(String port : ports){
+            jComboBoxPortName.addItem(port);
+        }
 	}
 
 	private class SwingAction extends AbstractAction {

@@ -17,6 +17,7 @@ package gctest;
 
 
 import jssc.SerialPort;
+import jssc.SerialPortList;
 import net.wimpi.modbus.ModbusCoupler;
 import net.wimpi.modbus.Modbus;
 import net.wimpi.modbus.io.ModbusSerialTransaction;
@@ -31,7 +32,7 @@ import net.wimpi.modbus.util.SerialParameters;
  * @author Dieter Wimberger
  * @version @version@ (@date@)
  */
-public class ModBusMaster {
+public class DA555 {
 
 	public static void main(String[] args) {
 
@@ -41,9 +42,9 @@ public class ModBusMaster {
 		ReadInputRegistersResponse res = null;
 		
 		String portname = null;
-		int unitid = 0;
-		int ref = 0;
-		int count = 0;
+		int unitid = 1;
+		int ref = 2;
+		int count = ((9*2+1)*1+1);
 		int repeat = 1;
 
 		try {
@@ -51,7 +52,12 @@ public class ModBusMaster {
 			// 1. Setup the parameters
 			if (args.length < 4) {
 				printUsage();
-				System.exit(1);
+		
+				String[] ports = SerialPortList.getPortNames();
+		        if(ports.length > 0)    	portname=ports[0];
+		        System.out.println("Use portname= "+portname+"; Unit Address = "+ unitid +"; register = "+ref+"; wordcount = "+count);
+		 
+				////System.exit(1);
 			} else {
 				try {
 					portname = args[0];
@@ -128,7 +134,7 @@ public class ModBusMaster {
 
 	private static void printUsage() {
 		System.out
-				.println("java gcmodbus <portname [String]>  <Unit Address [int8]> <register [int16]> <wordcount [int16]> {<repeat [int]>}");
+				.println("java DA555 <portname [String]>  <Unit Address [int8]> <register [int16]> <wordcount [int16]> {<repeat [int]>}");
 	}// printUsage
 
 }// class SerialAITest
