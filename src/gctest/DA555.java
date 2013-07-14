@@ -39,6 +39,26 @@ import net.wimpi.modbus.util.SerialParameters;
  * @version @version@ (@date@)
  */
 public class DA555 {
+	static int NCh=0;
+	private static int NMenu[] = // Количество параметров для разных конфигураций
+		    {
+		    30, // 1 канал
+		    30, // 2 канала НЕТ!!!
+		    37, // 3 канала
+		    37, // 4 канала НЕТ!!!
+		    43  // 5 канала
+		    };
+		  // Количество входных регистров для разных конфигураций
+	private static int	NInReg[] = // Массив количества входных регистров для разных конфигураций
+		    {
+		    ((9*2+1)*1+1),
+		    ((9*2+1)*2+1),
+		    ((9*2+1)*3+1),
+		    ((9*2+1)*4+1),
+		    ((9*2+1)*5+1)
+		    };
+//		  StartInReg=2;						            // Начальный адрес входных регистров
+//		  StartHldReg=100;						        // Начальный адрес регистров хранениЯ
 
 	public static void main(String[] args) {
 
@@ -47,9 +67,7 @@ public class DA555 {
 		ModbusRequest req = null;
 		ModbusResponse rres = null;
 		WriteMultipleRegistersRequest wmreq=null;
-//		WriteMultipleRegistersResponse wmres=null;
-//		WriteSingleRegisterRequest wsreq=null;
-//		WriteSingleRegisterResponse wsres = null;
+
 		
 		String portname = null;
 		int unitid = 1;
@@ -116,11 +134,13 @@ public class DA555 {
 			rres =  trans.getResponse();
 //			System.out.println("Decode...");
 			registers =   rres.getRegisters();
+			NCh = registers[0].toBytes()[0];
 			System.out.println("NCh         = "+registers[0].toBytes()[0]);
 			System.out.println("NInK        = "+registers[0].toBytes()[1]);//	          NInK:=ComBufRX[4];
 			System.out.println("PrgrmDate   = "+registers[1].toBytes()[0]);//	          PrgrmDate:=ComBufRX[5];
 			System.out.println("PrgrmMounth = "+registers[1].toBytes()[1]);//	          PrgrmMounth:=ComBufRX[6];
 			System.out.println("PrgrmYear   = "+(2000+registers[2].toBytes()[0]));//	          PrgrmYear:=2000+ComBufRX[7];
+			count = NMenu[NCh-1];
 //			for (int n = 0; n < rres.getWordCount(); n++) {
 //				System.out.println("Word " + n + "="
 //						+ rres.getRegisterValue(n));
