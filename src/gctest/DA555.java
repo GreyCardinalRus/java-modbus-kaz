@@ -21,9 +21,15 @@ import jssc.SerialPortList;
 import net.wimpi.modbus.ModbusCoupler;
 import net.wimpi.modbus.Modbus;
 import net.wimpi.modbus.io.ModbusSerialTransaction;
+import net.wimpi.modbus.msg.DA555ReadID;
+import net.wimpi.modbus.msg.ModbusRequest;
+import net.wimpi.modbus.msg.ModbusResponse;
 import net.wimpi.modbus.msg.ReadInputRegistersRequest;
 import net.wimpi.modbus.msg.ReadInputRegistersResponse;
+import net.wimpi.modbus.msg.WriteMultipleRegistersRequest;
 import net.wimpi.modbus.net.SerialConnection;
+import net.wimpi.modbus.procimg.InputRegister;
+import net.wimpi.modbus.procimg.Register;
 import net.wimpi.modbus.util.SerialParameters;
 
 /**
@@ -38,15 +44,19 @@ public class DA555 {
 
 		SerialConnection con = null;
 		ModbusSerialTransaction trans = null;
-		ReadInputRegistersRequest req = null;
-		ReadInputRegistersResponse res = null;
+		ModbusRequest req = null;
+		ModbusResponse rres = null;
+		WriteMultipleRegistersRequest wmreq=null;
+//		WriteMultipleRegistersResponse wmres=null;
+//		WriteSingleRegisterRequest wsreq=null;
+//		WriteSingleRegisterResponse wsres = null;
 		
 		String portname = null;
 		int unitid = 1;
 		int ref = 2;
 		int count = ((9*2+1)*1+1);
 		int repeat = 1;
-
+		InputRegister[]  registers = new Register[count];
 		try {
 
 			// 1. Setup the parameters
@@ -95,14 +105,34 @@ public class DA555 {
 			// 4. Open the connection
 			con = new SerialConnection(params);
 			con.open();
-
+///777
+			System.out.println("Get DA-555 id");
+			req  = new DA555ReadID(ref);
+			req.setUnitID(unitid);
+			req.setHeadless();
+			trans = new ModbusSerialTransaction(con);
+			trans.setRequest(req);
+			trans.execute();
+			rres =  trans.getResponse();
+//			System.out.println("Decode...");
+			registers =   rres.getRegisters();
+			System.out.println("NCh         = "+registers[0].toBytes()[0]);
+			System.out.println("NInK        = "+registers[0].toBytes()[1]);//	          NInK:=ComBufRX[4];
+			System.out.println("PrgrmDate   = "+registers[1].toBytes()[0]);//	          PrgrmDate:=ComBufRX[5];
+			System.out.println("PrgrmMounth = "+registers[1].toBytes()[1]);//	          PrgrmMounth:=ComBufRX[6];
+			System.out.println("PrgrmYear   = "+(2000+registers[2].toBytes()[0]));//	          PrgrmYear:=2000+ComBufRX[7];
+//			for (int n = 0; n < rres.getWordCount(); n++) {
+//				System.out.println("Word " + n + "="
+//						+ rres.getRegisterValue(n));
+//////				 //(rres.getRegisterValue(n));
+//			}
+			
 			// 5. Prepare a request
 			req = new ReadInputRegistersRequest(ref, count);
 			req.setUnitID(unitid);
 			req.setHeadless();
-			if (Modbus.debug)
-				System.out.println("Req.: " + req.getHexMessage());
-
+			//if (Modbus.debug)
+			//	System.out.println("Req.: " + req.getHexMessage());
 			// 6. Prepare the transaction
 			trans = new ModbusSerialTransaction(con);
 			trans.setRequest(req);
@@ -112,17 +142,56 @@ public class DA555 {
 			do {
 				trans.execute();
 
-				res = (ReadInputRegistersResponse) trans.getResponse();
-				if (Modbus.debug)
-					System.out.println("Response: " + res.getHexMessage());
-				for (int n = 0; n < res.getWordCount(); n++) {
+				rres =  trans.getResponse();
+//				registers =  (Register[]) rres.getRegisters();
+				//if (Modbus.debug)
+				//	System.out.println("Response: " + res.getHexMessage());
+				for (int n = 0; n < rres.getWordCount(); n++) {
 					System.out.println("Word " + n + "="
-							+ res.getRegisterValue(n));
+						+ rres.getRegisterValue(n));
+////					 //(rres.getRegisterValue(n));
 				}
 				k++;
 			} while (k < repeat);
+            // 8. modify
+			
+			//Register reg = new Regi;
+			//registers[0].setValue(5);
+//			wmreq = new WriteMultipleRegistersRequest(ref, registers);
+//			wmreq.setUnitID(unitid);
+//			wmreq.setHeadless();
+//			
+//			trans.setRequest(wmreq);
+//			trans.execute();
+//			wmres = (WriteMultipleRegistersResponse) trans.getResponse();
+//			for (int n = 0; n < wres.getWordCount(); n++) {
+//				System.out.println("Word " + n + "="
+//						+ wres.getRegisterValue(n));
+				//registers[n].setValue(rres.getRegisterValue(n));
+//			}
 
-			// 8. Close the connection
+			// 9. read again
+			
+			trans.setRequest(req);
+
+			// 7. Execute the transaction repeat times
+			k = 0; 
+			do {
+				trans.execute();
+
+				rres = (ReadInputRegistersResponse) trans.getResponse();
+				//if (Modbus.debug)
+				//	System.out.println("Response: " + res.getHexMessage());
+//				for (int n = 0; n < rres.getWordCount(); n++) {
+//					System.out.println("Word " + n + "="
+//							+ rres.getRegisterValue(n));
+////					registers[n].setValue(rres.getRegisterValue(n));
+//				}
+				k++;
+			} while (k < repeat);
+			
+			// 10. restore
+			// 11. Close the connection
 			con.close();
 
 		} catch (Exception ex) {

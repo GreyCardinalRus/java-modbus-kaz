@@ -1,6 +1,3 @@
-
-
-package gctest;
 /***
  * Copyright 2002-2010 jamod development team
  *
@@ -17,8 +14,8 @@ package gctest;
  * limitations under the License.
  ***/
 
+package net.wimpi.modbus.cmd;
 
-import jssc.SerialPort;
 import net.wimpi.modbus.ModbusCoupler;
 import net.wimpi.modbus.Modbus;
 import net.wimpi.modbus.io.ModbusSerialTransaction;
@@ -33,7 +30,7 @@ import net.wimpi.modbus.util.SerialParameters;
  * @author Dieter Wimberger
  * @version @version@ (@date@)
  */
-public class ModBusMaster {
+public class SerialAITest {
 
 	public static void main(String[] args) {
 
@@ -41,9 +38,7 @@ public class ModBusMaster {
 		ModbusSerialTransaction trans = null;
 		ReadInputRegistersRequest req = null;
 		ReadInputRegistersResponse res = null;
-		
-		//Modbus.debug=true;
-		
+
 		String portname = null;
 		int unitid = 0;
 		int ref = 0;
@@ -81,11 +76,11 @@ public class ModBusMaster {
 			// 3. Setup serial parameters
 			SerialParameters params = new SerialParameters();
 			params.setPortName(portname);
-			params.setBaudRate(SerialPort.BAUDRATE_19200);
-			params.setDatabits(SerialPort.DATABITS_8);
-			params.setParity(SerialPort.PARITY_NONE);
-			params.setStopbits(SerialPort.STOPBITS_1);
-			params.setEncoding(Modbus.SERIAL_ENCODING_RTU);
+			params.setBaudRate(19200);
+			params.setDatabits(8);
+			params.setParity("None");
+			params.setStopbits(1);
+			params.setEncoding(net.wimpi.modbus.Modbus.SERIAL_ENCODING_RTU);
 			params.setEcho(false);
 			if (Modbus.debug)
 				System.out.println("Encoding [" + params.getEncoding() + "]");
@@ -132,7 +127,7 @@ public class ModBusMaster {
 
 	private static void printUsage() {
 		System.out
-				.println("java gcmodbus <portname [String]>  <Unit Address [int8]> <register [int16]> <wordcount [int16]> {<repeat [int]>}");
+				.println("java net.wimpi.modbus.cmd.SerialAITest <portname [String]>  <Unit Address [int8]> <register [int16]> <wordcount [int16]> {<repeat [int]>}");
 	}// printUsage
 
 }// class SerialAITest

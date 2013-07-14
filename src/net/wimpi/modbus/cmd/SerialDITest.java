@@ -1,6 +1,3 @@
-
-
-package gctest;
 /***
  * Copyright 2002-2010 jamod development team
  *
@@ -15,17 +12,21 @@ package gctest;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ * 
+ * Original implementation by jamod development team.
+ * This file modified by Charles Hache <chache@brood.ca>
  ***/
 
+package net.wimpi.modbus.cmd;
 
-import jssc.SerialPort;
 import net.wimpi.modbus.ModbusCoupler;
 import net.wimpi.modbus.Modbus;
 import net.wimpi.modbus.io.ModbusSerialTransaction;
-import net.wimpi.modbus.msg.ReadInputRegistersRequest;
-import net.wimpi.modbus.msg.ReadInputRegistersResponse;
+import net.wimpi.modbus.msg.ReadInputDiscretesRequest;
+import net.wimpi.modbus.msg.ReadInputDiscretesResponse;
 import net.wimpi.modbus.net.SerialConnection;
 import net.wimpi.modbus.util.SerialParameters;
+import net.wimpi.modbus.util.BitVector;
 
 /**
  * Class that implements a simple commandline tool for reading an analog input.
@@ -33,17 +34,15 @@ import net.wimpi.modbus.util.SerialParameters;
  * @author Dieter Wimberger
  * @version @version@ (@date@)
  */
-public class ModBusMaster {
+public class SerialDITest {
 
 	public static void main(String[] args) {
 
 		SerialConnection con = null;
 		ModbusSerialTransaction trans = null;
-		ReadInputRegistersRequest req = null;
-		ReadInputRegistersResponse res = null;
-		
-		//Modbus.debug=true;
-		
+		ReadInputDiscretesRequest req = null;
+		ReadInputDiscretesResponse res = null;
+
 		String portname = null;
 		int unitid = 0;
 		int ref = 0;
@@ -81,12 +80,12 @@ public class ModBusMaster {
 			// 3. Setup serial parameters
 			SerialParameters params = new SerialParameters();
 			params.setPortName(portname);
-			params.setBaudRate(SerialPort.BAUDRATE_19200);
-			params.setDatabits(SerialPort.DATABITS_8);
-			params.setParity(SerialPort.PARITY_NONE);
-			params.setStopbits(SerialPort.STOPBITS_1);
-			params.setEncoding(Modbus.SERIAL_ENCODING_RTU);
-			params.setEcho(false);
+			params.setBaudRate(115200);
+			params.setDatabits(7);
+			params.setParity("None");
+			params.setStopbits(2);
+			// params.setEncoding("rtu");
+			// params.setEcho(true);
 			if (Modbus.debug)
 				System.out.println("Encoding [" + params.getEncoding() + "]");
 
@@ -95,7 +94,7 @@ public class ModBusMaster {
 			con.open();
 
 			// 5. Prepare a request
-			req = new ReadInputRegistersRequest(ref, count);
+			req = new ReadInputDiscretesRequest(ref, count);
 			req.setUnitID(unitid);
 			req.setHeadless();
 			if (Modbus.debug)
@@ -110,13 +109,14 @@ public class ModBusMaster {
 			do {
 				trans.execute();
 
-				res = (ReadInputRegistersResponse) trans.getResponse();
+				res = (ReadInputDiscretesResponse) trans.getResponse();
 				if (Modbus.debug)
 					System.out.println("Response: " + res.getHexMessage());
-				for (int n = 0; n < res.getWordCount(); n++) {
-					System.out.println("Word " + n + "="
-							+ res.getRegisterValue(n));
+				BitVector inputs = res.getDiscretes();
+				for (int i = 0; i < count; i++) {
+					System.out.println("Bit " + i + " = " + inputs.getBit(i));
 				}
+
 				k++;
 			} while (k < repeat);
 
@@ -132,7 +132,7 @@ public class ModBusMaster {
 
 	private static void printUsage() {
 		System.out
-				.println("java gcmodbus <portname [String]>  <Unit Address [int8]> <register [int16]> <wordcount [int16]> {<repeat [int]>}");
+				.println("java net.wimpi.modbus.cmd.SerialAITest <portname [String]>  <Unit Address [int8]> <register [int16]> <wordcount [int16]> {<repeat [int]>}");
 	}// printUsage
 
 }// class SerialAITest
