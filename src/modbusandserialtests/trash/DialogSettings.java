@@ -19,7 +19,7 @@
  * e-mail: scream3r.org@gmail.com
  * web-site: www.scream3r.org
  */
-package gctest;
+package modbusandserialtests.trash;
 
 import java.awt.GradientPaint;
 import java.awt.Graphics;
@@ -79,6 +79,9 @@ public class DialogSettings extends javax.swing.JPanel {
     }
 
    
+	/**
+	 * @wbp.parser.constructor
+	 */
 	public DialogSettings(JFrame parent, String portName, int baudRate, int dataBits, int stopBits, int parity) {
 	//       this.parent = parent;
 	        this.portName = portName;
@@ -103,7 +106,7 @@ public class DialogSettings extends javax.swing.JPanel {
 
 	        setSettings();
 
-	        parent.add(glassPane, 0);
+	        parent.getContentPane().add(glassPane, 0);
 	        glassPane.setBounds(parent.getBounds());
 	        parent.validate();
 	        parent.repaint();

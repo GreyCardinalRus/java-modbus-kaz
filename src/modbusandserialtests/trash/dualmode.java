@@ -1,4 +1,4 @@
-package gctest;
+package modbusandserialtests.trash;
 
 import java.awt.EventQueue;
 import jssc.SerialPort;

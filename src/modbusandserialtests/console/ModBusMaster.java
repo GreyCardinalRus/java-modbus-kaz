@@ -1,6 +1,6 @@
 
 
-package gctest;
+package modbusandserialtests.console;
 /***
  * Copyright 2002-2010 jamod development team
  *

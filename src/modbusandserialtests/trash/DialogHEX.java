@@ -19,7 +19,7 @@
  * e-mail: scream3r.org@gmail.com
  * web-site: www.scream3r.org
  */
-package gctest;
+package modbusandserialtests.trash;
 
 import java.awt.GradientPaint;
 import java.awt.Graphics;

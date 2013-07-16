@@ -19,28 +19,42 @@
  * e-mail: scream3r.org@gmail.com
  * web-site: www.scream3r.org
  */
-package gctest;
+package modbusandserialtests.trash;
 
-import java.awt.Desktop;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
-import java.net.URI;
+import javax.swing.Icon;
 
 /**
  *
  * @author scream3r
  */
-public class DialogAbout extends javax.swing.JPanel {
+public class DialogMessage extends javax.swing.JPanel {
+
+    public static final int TYPE_ERROR = 0;
+    public static final int TYPE_INFO = 1;
+    public static final int TYPE_QUESTION = 2;
+    public static final int TYPE_WARNING = 3;
+
+    private Icon error = javax.swing.UIManager.getIcon("OptionPane.errorIcon");
+    private Icon info = javax.swing.UIManager.getIcon("OptionPane.informationIcon");
+    private Icon question = javax.swing.UIManager.getIcon("OptionPane.questionIcon");
+    private Icon warning = javax.swing.UIManager.getIcon("OptionPane.warningIcon");
+
+    private Icon[] icons = {error, info, question, warning};
 
     private Form parent;
 
     /** Creates new form DialogMessage */
-    public DialogAbout(Form parent) {
+    public DialogMessage(Form parent, int type, String header, String message) {
         this.parent = parent;
         initComponents();
-        setSize(500, 236);
+        jHeaderLabel.setText(header);
+        jLabelMessage.setIcon(icons[type]);
+        jLabelMessage.setText(message);
+        setSize(500, 136);
 
         parent.setControlsFocusable(false);
         GlassPane glassPane = new GlassPane();
@@ -49,12 +63,12 @@ public class DialogAbout extends javax.swing.JPanel {
         int y = (parent.getHeight()/2) - getHeight()/2;
         setBounds(x, y, getWidth(), getHeight());
 //        Main.getApplet().setGlassPane(glassPane);
- //       glassPane.setVisible(true);
+//        glassPane.setVisible(true);
     }
 
     private void closeDialog() {
- //       Main.getApplet().getGlassPane().setVisible(false);
-        parent.setControlsFocusable(true);
+//        Main.getApplet().getGlassPane().setVisible(false);
+//        parent.setControlsFocusable(true);
     }
 
     /** This method is called from within the constructor to
@@ -81,14 +95,13 @@ public class DialogAbout extends javax.swing.JPanel {
         jLabelMessage = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jButtonClose = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
 
         jHeaderPanel.setBorder(NimbusGui.DIALOG_PANEL_BORDER);
         jHeaderPanel.setPreferredSize(new java.awt.Dimension(286, 30));
 
-        jHeaderLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jHeaderLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
         jHeaderLabel.setForeground(NimbusGui.SECTION_LABEL_FONT_COLOR);
-        jHeaderLabel.setText("About jSSC-Terminal");
+        jHeaderLabel.setText("Header");
 
         javax.swing.GroupLayout jHeaderPanelLayout = new javax.swing.GroupLayout(jHeaderPanel);
         jHeaderPanel.setLayout(jHeaderPanelLayout);
@@ -97,7 +110,7 @@ public class DialogAbout extends javax.swing.JPanel {
             .addGroup(jHeaderPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jHeaderLabel)
-                .addContainerGap(363, Short.MAX_VALUE))
+                .addContainerGap(447, Short.MAX_VALUE))
         );
         jHeaderPanelLayout.setVerticalGroup(
             jHeaderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -109,7 +122,6 @@ public class DialogAbout extends javax.swing.JPanel {
         jDataPanel.setPreferredSize(new java.awt.Dimension(276, 75));
 
         jLabelMessage.setFont(NimbusGui.DEFAULT_FONT);
-        jLabelMessage.setText("<html>\n&nbsp;&nbsp;This is a free and open source (GPL3 license) application that demonstrate some functions of jSSC (Java Simple Serial Connector) library. You can use this terminal for your work and make changes in source code (under terms of GPL3 license).<br><br>\n\n<center><strong>Based on jSSC-0.8-tb2</strong><br><br></center>\n\n<center>Author: Sokolov Alexey (scream3r)</center>\n</html>");
 
         jSeparator1.setPreferredSize(new java.awt.Dimension(50, 2));
 
@@ -127,15 +139,6 @@ public class DialogAbout extends javax.swing.JPanel {
             }
         });
 
-        jLabel1.setFont(NimbusGui.DEFAULT_FONT);
-        jLabel1.setText("<html><a href=\"http://scream3r.org\">http://scream3r.org</a></html>");
-        jLabel1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel1MouseClicked(evt);
-            }
-        });
-
         javax.swing.GroupLayout jDataPanelLayout = new javax.swing.GroupLayout(jDataPanel);
         jDataPanel.setLayout(jDataPanelLayout);
         jDataPanelLayout.setHorizontalGroup(
@@ -146,9 +149,7 @@ public class DialogAbout extends javax.swing.JPanel {
                 .addComponent(jLabelMessage, javax.swing.GroupLayout.DEFAULT_SIZE, 488, Short.MAX_VALUE)
                 .addGap(6, 6, 6))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDataPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 298, Short.MAX_VALUE)
+                .addContainerGap(404, Short.MAX_VALUE)
                 .addComponent(jButtonClose, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(6, 6, 6))
         );
@@ -156,13 +157,11 @@ public class DialogAbout extends javax.swing.JPanel {
             jDataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jDataPanelLayout.createSequentialGroup()
                 .addGap(6, 6, 6)
-                .addComponent(jLabelMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabelMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(6, 6, 6)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(6, 6, 6)
-                .addGroup(jDataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonClose, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jButtonClose, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(8, 8, 8))
         );
 
@@ -178,7 +177,7 @@ public class DialogAbout extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jHeaderPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
-                .addComponent(jDataPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jDataPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -195,25 +194,12 @@ public class DialogAbout extends javax.swing.JPanel {
         }
 }//GEN-LAST:event_jButtonCloseKeyPressed
 
-    private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
-        if(Desktop.isDesktopSupported()){
-            Desktop desktop = Desktop.getDesktop();
-            try {
-                desktop.browse(new URI("http://scream3r.org"));
-            }
-            catch (Exception ex) {
-                //Do nothing
-            }
-        }
-    }//GEN-LAST:event_jLabel1MouseClicked
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonClose;
     private javax.swing.JPanel jDataPanel;
     static javax.swing.JLabel jHeaderLabel;
     private javax.swing.JPanel jHeaderPanel;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabelMessage;
     private javax.swing.JSeparator jSeparator1;
     // End of variables declaration//GEN-END:variables

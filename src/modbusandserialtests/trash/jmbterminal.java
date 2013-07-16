@@ -1,4 +1,4 @@
-package gctest;
+package modbusandserialtests.trash;
 
 import javax.swing.JFrame;
 
