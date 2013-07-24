@@ -25,11 +25,11 @@ public class DialogSerialSettings extends JPanel {
 	 */
 	public DialogSerialSettings() {
 		
-//		JLabel label = new JLabel();
-//		label.setText("Port name:");
-//		label.setPreferredSize(new Dimension(120, 14));
-//		label.setHorizontalAlignment(SwingConstants.CENTER);
-//		label.setFont(new Font("Dialog", Font.PLAIN, 11));
+		JLabel label = new JLabel();
+		label.setText("Port name:");
+		label.setPreferredSize(new Dimension(120, 14));
+		label.setHorizontalAlignment(SwingConstants.CENTER);
+		label.setFont(new Font("Dialog", Font.PLAIN, 11));
 		
 //		JLabel label_1 = new JLabel();
 //		label_1.setText("Baudrate:");
@@ -85,7 +85,7 @@ public class DialogSerialSettings extends JPanel {
 //		button_1.setText("Cancel");
 //		button_1.setPreferredSize(new Dimension(90, 28));
 //		button_1.setFont(new Font("Dialog", Font.PLAIN, 11));
-//		GroupLayout groupLayout = new GroupLayout(this);
+		GroupLayout groupLayout = new GroupLayout(this);
 //		groupLayout.setHorizontalGroup(
 //			groupLayout.createParallelGroup(Alignment.LEADING)
 //				.addGroup(groupLayout.createSequentialGroup()

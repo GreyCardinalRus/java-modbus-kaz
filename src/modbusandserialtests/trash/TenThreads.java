@@ -56,9 +56,9 @@ public class TenThreads {
 
 	private static int[][] getBigHairyMatrix(int numThreads) {
 		// TODO Auto-generated method stub
-		int[][] bm= new int[numThreads][numThreads*numThreads*numThreads]; Random rnd = new Random();
+		int[][] bm= new int[numThreads][numThreads^4]; Random rnd = new Random();
 		for(int i=0;i<numThreads;i++)
-			for(int j=0;j<numThreads*numThreads*numThreads;j++)
+			for(int j=0;j<(numThreads^4);j++)
 				bm[i][j]=rnd.nextInt();
 		return bm;
 	}
