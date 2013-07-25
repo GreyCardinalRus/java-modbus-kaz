@@ -24,6 +24,9 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.Color;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import javax.swing.JTextPane;
 import javax.swing.JFormattedTextField;
 import javax.swing.JComboBox;
@@ -41,6 +44,7 @@ public class MBTGUI {
 	SerialParameters params[] = new SerialParameters[numPorts];
 	SerialConnection con[] = new SerialConnection[numPorts];
 	JButton buttonPort0CD;
+	Timer myTimer = new Timer(); // Создаем таймер
 	/**
 	 * Launch the application.
 	 */
@@ -50,6 +54,7 @@ public class MBTGUI {
 				try {
 					MBTGUI window = new MBTGUI();
 					window.frmTestForModbus.setVisible(true);
+					//window.myTimer.cancel();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -63,11 +68,33 @@ public class MBTGUI {
 	public MBTGUI() {
 		initialize();
 	}
-
+//~MBTGUI(){};
 	/**
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		myTimer.schedule(new TimerTask() { // Определяем задачу
+		    @Override
+		    public void run() {
+		    	System.out.println("Times ap");
+		    	if(null!=con[0] && con[0].isOpen())
+		    	{
+				tabbedPane.setBackgroundAt(1, Color.GREEN);
+				buttonPort0CD.setText("Disconnect");
+		    		
+		    	}else{
+					tabbedPane.setBackgroundAt(1, Color.RED);
+					buttonPort0CD.setText("Connect");
+		    	}
+		        //final String result = doLongAndComplicatedTask();
+		        //uiHandler.post(new Runnable() {
+		        //    @Override
+		         //   public void run() {
+		         //       txtResult.setText(result);
+		          //  }
+		      //  });
+		    };//);
+		}, 1000L, 1L * 1000); // интервал - 60000 миллисекунд, 0 миллисекунд до первого запуска.
 		frmTestForModbus = new JFrame();
 		frmTestForModbus.setTitle("Test for MODBUS");
 		frmTestForModbus.setBounds(100, 100, 450, 300);
@@ -175,8 +202,9 @@ public class MBTGUI {
 					
 					if(tabbedPane.getBackgroundAt(1)== Color.GREEN)
 					{
-						tabbedPane.setBackgroundAt(1, Color.RED);
-						buttonPort0CD.setText("Connect");con[0].close();
+						//tabbedPane.setBackgroundAt(1, Color.RED);
+						//buttonPort0CD.setText("Connect");
+						con[0].close();
 					}
 					else
 					{
@@ -186,8 +214,8 @@ public class MBTGUI {
 						con[0] = new SerialConnection(params[0]);
 						try {
 							con[0].open();
-							tabbedPane.setBackgroundAt(1, Color.GREEN);
-						buttonPort0CD.setText("Disconnect");
+							//tabbedPane.setBackgroundAt(1, Color.GREEN);
+						//buttonPort0CD.setText("Disconnect");
 						} catch (Exception e1) {
 							// TODO Auto-generated catch block
 							///e1.printStackTrace();
