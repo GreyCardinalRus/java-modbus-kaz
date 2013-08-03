@@ -24,6 +24,7 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.Color;
+import java.sql.Time;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -34,6 +35,8 @@ import javax.swing.JComboBox;
 import net.wimpi.modbus.Modbus;
 import net.wimpi.modbus.net.SerialConnection;
 import net.wimpi.modbus.util.SerialParameters;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 
 public class MBTGUI {
 
@@ -43,8 +46,11 @@ public class MBTGUI {
 	JCheckBoxMenuItem mntmPort[]=new JCheckBoxMenuItem[numPorts];
 	SerialParameters params[] = new SerialParameters[numPorts];
 	SerialConnection con[] = new SerialConnection[numPorts];
-	JButton buttonPort0CD;
+	JButton btnCDPort0;
+	JComboBox<String> comboBoxPort0;
+	JButton btnconfigPort0;
 	Timer myTimer = new Timer(); // Создаем таймер
+	private final Action action = new SwingAction();
 	/**
 	 * Launch the application.
 	 */
@@ -76,15 +82,17 @@ public class MBTGUI {
 		myTimer.schedule(new TimerTask() { // Определяем задачу
 		    @Override
 		    public void run() {
-		    	System.out.println("Times ap");
+		    	///System.out.println("Times ap");
 		    	if(null!=con[0] && con[0].isOpen())
 		    	{
 				tabbedPane.setBackgroundAt(1, Color.GREEN);
-				buttonPort0CD.setText("Disconnect");
+				btnCDPort0.setText("Disconnect");
+				btnconfigPort0.setEnabled(false);
 		    		
 		    	}else{
 					tabbedPane.setBackgroundAt(1, Color.RED);
-					buttonPort0CD.setText("Connect");
+					btnCDPort0.setText("Connect");
+					btnconfigPort0.setEnabled(true);
 		    	}
 		        //final String result = doLongAndComplicatedTask();
 		        //uiHandler.post(new Runnable() {
@@ -102,7 +110,7 @@ public class MBTGUI {
 		
 		String[] ports = SerialPortList.getPortNames();
 		JMenuBar menuBar = new JMenuBar();
-		final JComboBox comboBoxPort0;
+		
 		frmTestForModbus.setJMenuBar(menuBar);
 		
 		JMenu mnFile = new JMenu("File");
@@ -187,7 +195,7 @@ public class MBTGUI {
 		Port0.setLayout(gbl_Port0);
 			
 				
-				comboBoxPort0 = new JComboBox();  
+				comboBoxPort0 = new JComboBox<String>();  
 				GridBagConstraints gbc_comboBox = new GridBagConstraints();
 				gbc_comboBox.gridwidth = 5;
 				gbc_comboBox.insets = new Insets(0, 0, 5, 5);
@@ -196,8 +204,8 @@ public class MBTGUI {
 				gbc_comboBox.gridy = 0;
 				Port0.add(comboBoxPort0, gbc_comboBox);
 			
-			buttonPort0CD = new JButton("Connect");
-			buttonPort0CD.addActionListener(new ActionListener() {
+			btnCDPort0 = new JButton("Connect");
+			btnCDPort0.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					
 					if(tabbedPane.getBackgroundAt(1)== Color.GREEN)
@@ -228,13 +236,13 @@ public class MBTGUI {
 			gbc_button.insets = new Insets(0, 0, 5, 5);
 			gbc_button.gridx = 5;
 			gbc_button.gridy = 0;
-			Port0.add(buttonPort0CD, gbc_button);
-			JButton btnPort0config = new JButton("Config");
+			Port0.add(btnCDPort0, gbc_button);
+			btnconfigPort0 = new JButton("Config");
 			GridBagConstraints gbc_btnPort0config = new GridBagConstraints();
 			gbc_btnPort0config.insets = new Insets(0, 0, 5, 0);
 			gbc_btnPort0config.gridx = 6;
 			gbc_btnPort0config.gridy = 0;
-			Port0.add(btnPort0config, gbc_btnPort0config);
+			Port0.add(btnconfigPort0, gbc_btnPort0config);
 			for(String port : ports){
         	comboBoxPort0.addItem(port);
         }	
@@ -292,5 +300,13 @@ public class MBTGUI {
 		params[i].setEcho(false);
 		}
 
+	}
+	private class SwingAction extends AbstractAction {
+		public SwingAction() {
+			putValue(NAME, "SwingAction");
+			putValue(SHORT_DESCRIPTION, "Some short description");
+		}
+		public void actionPerformed(ActionEvent e) {
+		}
 	}
 }
