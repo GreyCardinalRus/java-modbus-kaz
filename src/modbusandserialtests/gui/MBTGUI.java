@@ -14,16 +14,21 @@ import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JTabbedPane;
 import java.awt.BorderLayout;
+
+import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JProgressBar;
 import javax.swing.JInternalFrame;
 import javax.swing.JToolBar;
+
+import java.awt.FileDialog;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.Color;
+import java.io.File;
 import java.sql.Time;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -33,12 +38,22 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JComboBox;
 
 import net.wimpi.modbus.Modbus;
+import net.wimpi.modbus.ModbusException;
+import net.wimpi.modbus.ModbusIOException;
+import net.wimpi.modbus.ModbusSlaveException;
+import net.wimpi.modbus.io.ModbusSerialTransaction;
+import net.wimpi.modbus.msg.DA555ReadID;
+import net.wimpi.modbus.msg.ModbusRequest;
+import net.wimpi.modbus.msg.ModbusResponse;
+import net.wimpi.modbus.msg.WriteMultipleRegistersRequest;
 import net.wimpi.modbus.net.SerialConnection;
+import net.wimpi.modbus.procimg.InputRegister;
+import net.wimpi.modbus.procimg.Register;
 import net.wimpi.modbus.util.SerialParameters;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
-public class MBTGUI {
+public class MBTGUI  {
 
 	private JFrame frmTestForModbus;
 	private JTabbedPane tabbedPane;
@@ -46,6 +61,11 @@ public class MBTGUI {
 	JCheckBoxMenuItem mntmPort[]=new JCheckBoxMenuItem[numPorts];
 	SerialParameters params[] = new SerialParameters[numPorts];
 	SerialConnection con[] = new SerialConnection[numPorts];
+	ModbusSerialTransaction trans = null;
+	ModbusRequest req = null;
+	ModbusResponse rres = null;
+	WriteMultipleRegistersRequest wmreq=null;
+	
 	JButton btnCDPort0;
 	JComboBox<String> comboBoxPort0;
 	JButton btnconfigPort0;
@@ -165,6 +185,59 @@ public class MBTGUI {
 		tabbedPane.addTab("Tests", null, Tests, null);
 		
 		JButton btnStart = new JButton("Start");
+		btnStart.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String cd,fn;
+				//Create a file chooser
+				JFrame jp;
+				jp = (JFrame)(((JButton)e.getSource()).getParent().getParent().getParent().getParent().getParent().getParent());
+			    FileDialog fDialog = new FileDialog(jp, "Open ...", FileDialog.LOAD);
+		        fDialog.setVisible(true);
+		        // Get the file name chosen by the user
+		        String name = fDialog.getFile();
+
+		    // If user canceled file selection, return without doing anything.
+		        if(name == null)
+		            return;
+		        System.out.println(fDialog.getDirectory() + name);
+		        if(null!=con[0] && con[0].isOpen())
+		        {
+		        int unitid = 1;
+				int ref = 2;
+				System.out.println("Get DA-555 id");
+				req  = new DA555ReadID(ref);
+				req.setUnitID(unitid);
+				req.setHeadless();
+				trans = new ModbusSerialTransaction(con[0]);
+				trans.setRequest(req);
+				try {
+					trans.execute();
+				} catch (ModbusIOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (ModbusSlaveException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (ModbusException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				rres =  trans.getResponse();
+//				System.out.println("Decode...");
+				InputRegister[]  registers = new Register[50];
+				registers =   rres.getRegisters();
+				int NCh = registers[0].toBytes()[0];
+				System.out.println("NCh         = "+registers[0].toBytes()[0]);
+				System.out.println("NInK        = "+registers[0].toBytes()[1]);//	          NInK:=ComBufRX[4];
+				System.out.println("PrgrmDate   = "+registers[1].toBytes()[0]);//	          PrgrmDate:=ComBufRX[5];
+				System.out.println("PrgrmMounth = "+registers[1].toBytes()[1]);//	          PrgrmMounth:=ComBufRX[6];
+				System.out.println("PrgrmYear   = "+(2000+registers[2].toBytes()[0]));//	          PrgrmYear:=2000+ComBufRX[7];
+		        }
+		        else {
+		        	System.out.println("Port 0 not open!");
+		        }
+			}
+		});
 		Tests.add(btnStart);
 		
 		JButton btnStop = new JButton("Stop");
