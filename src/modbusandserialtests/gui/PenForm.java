@@ -109,13 +109,10 @@ public class PenForm {
 
 	void mainwork() {
 		// Тут чтото делаем очень важное!
-		
-
-		// порт открыт?
-		// if (con)
+		// TODO Читаем регистры
 		// 5. Prepare a request
-		// откуда  сколько
-		int ref=2, count=5;
+		// откуда сколько
+		int ref = 2, count = 5;
 		req = new ReadInputRegistersRequest(ref, count);
 		req.setUnitID(unitid);
 		req.setHeadless();
@@ -133,23 +130,25 @@ public class PenForm {
 			return;
 		} catch (ModbusSlaveException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();return;
+			e.printStackTrace();
+			return;
 		} catch (ModbusException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();return;
+			e.printStackTrace();
+			return;
 		}
 
-		rres =  trans.getResponse();
+		rres = trans.getResponse();
 		for (int n = 0; n < rres.getWordCount(); n++) {
-				listModel.addElement("Word " + n + "="
-		+ rres.getRegisterValue(n));
-		int index = listModel.size() - 1;
-		listOutput.setSelectedIndex(index);
-		listOutput.ensureIndexIsVisible(index);		
-	//	System.out.println("Word " + n + "="
-	//			+ rres.getRegisterValue(n));
+			listModel.addElement("Word " + n + "=" + rres.getRegisterValue(n));
+			int index = listModel.size() - 1;
+			listOutput.setSelectedIndex(index);
+			listOutput.ensureIndexIsVisible(index);
+			// System.out.println("Word " + n + "="
+			// + rres.getRegisterValue(n));
+		}
 	}
-	}
+
 	/**
 	 * Initialize the contents of the frame.
 	 */
@@ -200,11 +199,7 @@ public class PenForm {
 						paramsCom0.setStopbits(SerialPort.STOPBITS_1);
 						paramsCom0.setEncoding(Modbus.SERIAL_ENCODING_RTU);
 						paramsCom0.setEcho(false);
-						// if (Modbus.debug)
-						System.out.println("portName ["
-								+ paramsCom0.getPortName() + "]");
-
-						// 4. Open the connection
+						//  Open the connection
 						conCom0 = new SerialConnection(paramsCom0);
 						try {
 							conCom0.open();
@@ -213,7 +208,6 @@ public class PenForm {
 							e2.printStackTrace();
 							return;
 						}
-						// /777
 						System.out.println("Get DA-555 id");
 						req = new DA555ReadID(2);
 						req.setUnitID(unitid);
@@ -238,7 +232,6 @@ public class PenForm {
 						rres = trans.getResponse();
 						InputRegister[] registers = new Register[50];
 						registers = rres.getRegisters();
-						// NCh = registers[0].toBytes()[0];
 						System.out.println("NCh         = "
 								+ registers[0].toBytes()[0]);
 						System.out.println("NInK        = "
