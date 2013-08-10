@@ -123,14 +123,7 @@ public class MBTGUI {
 							btnCDPort0.setText("Connect");
 							btnconfigPort0.setEnabled(true);
 						}
-						// final String result = doLongAndComplicatedTask();
-						// uiHandler.post(new Runnable() {
-						// @Override
-						// public void run() {
-						// txtResult.setText(result);
-						// }
-						// });
-					};// );
+						};
 				}, 1000L, 1L * 1000); // интервал - 60000 миллисекунд, 0
 										// миллисекунд до первого запуска.
 		frmTestForModbus = new JFrame();
