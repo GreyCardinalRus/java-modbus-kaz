@@ -4,10 +4,7 @@
  * and open the template in the editor.
  */
 package da555;
-
-import javax.swing.ButtonGroup;
 import net.wimpi.modbus.gui.DialogSerialParameters;
-
 /**
  *
  * @author valentin
@@ -19,14 +16,6 @@ public class MaticProDA555 extends javax.swing.JFrame {
      */
     public MaticProDA555() {
         initComponents();
-        ButtonGroup group = new ButtonGroup();
-        group.add(jRadioButtonMenuItem50mc);
-        group.add(jRadioButtonMenuItem100mc);
-        group.add(jRadioButtonMenuItem200mc);
-        group.add(jRadioButtonMenuItem500mc);
-        group.add(jRadioButtonMenuItem1000mc);
-        group.add(jRadioButtonMenuItem2000mc);
-
     }
 
     /**
@@ -39,6 +28,7 @@ public class MaticProDA555 extends javax.swing.JFrame {
     private void initComponents() {
 
         desktopPane = new javax.swing.JDesktopPane();
+        ConnectjToggleButton = new javax.swing.JToggleButton();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         openMenuItem = new javax.swing.JMenuItem();
@@ -51,19 +41,16 @@ public class MaticProDA555 extends javax.swing.JFrame {
         pasteMenuItem = new javax.swing.JMenuItem();
         deleteMenuItem = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
-        jMenu2 = new javax.swing.JMenu();
-        jRadioButtonMenuItem50mc = new javax.swing.JRadioButtonMenuItem();
-        jRadioButtonMenuItem100mc = new javax.swing.JRadioButtonMenuItem();
-        jRadioButtonMenuItem200mc = new javax.swing.JRadioButtonMenuItem();
-        jRadioButtonMenuItem500mc = new javax.swing.JRadioButtonMenuItem();
-        jRadioButtonMenuItem1000mc = new javax.swing.JRadioButtonMenuItem();
-        jRadioButtonMenuItem2000mc = new javax.swing.JRadioButtonMenuItem();
-        jMenuPortSettings = new javax.swing.JMenuItem();
         helpMenu = new javax.swing.JMenu();
         contentMenuItem = new javax.swing.JMenuItem();
         aboutMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        ConnectjToggleButton.setText("Соединиться");
+        ConnectjToggleButton.setName("соединить"); // NOI18N
+        desktopPane.add(ConnectjToggleButton);
+        ConnectjToggleButton.setBounds(260, 0, 125, 25);
 
         fileMenu.setMnemonic('f');
         fileMenu.setText("Файл");
@@ -114,43 +101,6 @@ public class MaticProDA555 extends javax.swing.JFrame {
         menuBar.add(editMenu);
 
         jMenu1.setText("Настройки");
-
-        jMenu2.setText("Частота опроса");
-
-        jRadioButtonMenuItem50mc.setSelected(true);
-        jRadioButtonMenuItem50mc.setText("50 мс");
-        jMenu2.add(jRadioButtonMenuItem50mc);
-
-        jRadioButtonMenuItem100mc.setSelected(true);
-        jRadioButtonMenuItem100mc.setText("100 mc");
-        jMenu2.add(jRadioButtonMenuItem100mc);
-
-        jRadioButtonMenuItem200mc.setSelected(true);
-        jRadioButtonMenuItem200mc.setText("200 mc");
-        jMenu2.add(jRadioButtonMenuItem200mc);
-
-        jRadioButtonMenuItem500mc.setSelected(true);
-        jRadioButtonMenuItem500mc.setText("500 mc");
-        jMenu2.add(jRadioButtonMenuItem500mc);
-
-        jRadioButtonMenuItem1000mc.setSelected(true);
-        jRadioButtonMenuItem1000mc.setText("1 000 mc");
-        jMenu2.add(jRadioButtonMenuItem1000mc);
-
-        jRadioButtonMenuItem2000mc.setSelected(true);
-        jRadioButtonMenuItem2000mc.setText("2 000 mc");
-        jMenu2.add(jRadioButtonMenuItem2000mc);
-
-        jMenu1.add(jMenu2);
-
-        jMenuPortSettings.setText("Порт");
-        jMenuPortSettings.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuPortSettingsActionPerformed(evt);
-            }
-        });
-        jMenu1.add(jMenuPortSettings);
-
         menuBar.add(jMenu1);
 
         helpMenu.setMnemonic('h');
@@ -185,12 +135,6 @@ public class MaticProDA555 extends javax.swing.JFrame {
     private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
         System.exit(0);
     }//GEN-LAST:event_exitMenuItemActionPerformed
-
-    private void jMenuPortSettingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuPortSettingsActionPerformed
-        DialogSerialParameters ds = new DialogSerialParameters();
-        //      ds.setVisible(true);// TODO add your handling code here:
-        desktopPane.add(ds);
-    }//GEN-LAST:event_jMenuPortSettingsActionPerformed
 
     /**
      * @param args the command line arguments
@@ -228,6 +172,7 @@ public class MaticProDA555 extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JToggleButton ConnectjToggleButton;
     private javax.swing.JMenuItem aboutMenuItem;
     private javax.swing.JMenuItem contentMenuItem;
     private javax.swing.JMenuItem copyMenuItem;
@@ -239,14 +184,6 @@ public class MaticProDA555 extends javax.swing.JFrame {
     private javax.swing.JMenu fileMenu;
     private javax.swing.JMenu helpMenu;
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenuItem jMenuPortSettings;
-    private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem1000mc;
-    private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem100mc;
-    private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem2000mc;
-    private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem200mc;
-    private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem500mc;
-    private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem50mc;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem openMenuItem;
     private javax.swing.JMenuItem pasteMenuItem;
