@@ -693,7 +693,7 @@ public class Form extends javax.swing.JPanel {
         int y = (getHeight()/2) - dialog.getHeight()/2;
         dialog.setBounds(x, y, dialog.getWidth(), dialog.getHeight());
         //Main.getApplet().setGlassPane(glassPane);
-        //glassPane.setVisible(true);
+        glassPane.setVisible(true);
     }//GEN-LAST:event_jButtonSendHEXActionPerformed
 
     private void jButtonSettingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSettingsActionPerformed

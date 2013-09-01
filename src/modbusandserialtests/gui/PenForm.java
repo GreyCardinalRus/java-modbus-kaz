@@ -38,6 +38,7 @@ import net.wimpi.modbus.msg.DA555ReadID;
 import net.wimpi.modbus.msg.ModbusRequest;
 import net.wimpi.modbus.msg.ModbusResponse;
 import net.wimpi.modbus.msg.ReadInputRegistersRequest;
+import net.wimpi.modbus.msg.ReadMultipleRegistersRequest;
 import net.wimpi.modbus.msg.WriteMultipleRegistersRequest;
 import net.wimpi.modbus.net.SerialConnection;
 import net.wimpi.modbus.procimg.InputRegister;
@@ -112,28 +113,35 @@ public class PenForm {
 		// TODO Читаем регистры
 		// 5. Prepare a request
 		// откуда сколько
-		int ref = 2, count = 5;
-		req = new ReadInputRegistersRequest(ref, count);
+		//   com1_bf_tx[2] = 0x04;
+        //com1_bf_tx[3] = 0x4B; // 0xE8;
+        //com1_bf_tx[4] = 0x00;
+        //com1_bf_tx[5] = 0x06;
+		int ref = 0x004B, count = 0x06;
+		req = new ReadMultipleRegistersRequest(ref, count);
 		req.setUnitID(unitid);
 		req.setHeadless();
 
 		// 6. Prepare the transaction
 		trans = new ModbusSerialTransaction(conCom0);
 		trans.setRequest(req);
-
+                System.out.println("---");
 		// 7. Execute the transaction repeat times
 		try {
 			trans.execute();
 		} catch (ModbusIOException e) {
 			// TODO Auto-generated catch block
+			System.out.println("ModbusIOException");
 			e.printStackTrace();
 			return;
 		} catch (ModbusSlaveException e) {
 			// TODO Auto-generated catch block
+			System.out.println("ModbusSlaveException");
 			e.printStackTrace();
 			return;
 		} catch (ModbusException e) {
 			// TODO Auto-generated catch block
+			System.out.println("ModbusSlaveException");
 			e.printStackTrace();
 			return;
 		}
@@ -182,7 +190,7 @@ public class PenForm {
 			public void actionPerformed(ActionEvent e) {
 				// final JButton jb = (JButton) (e.getSource());
 
-				if (btnStartStop.getText() == "Start") {
+				if ("Start".equals(btnStartStop.getText())) {
 					if (myTimer == null) {
 						myTimer = new Timer((Integer) ajustPeriod.getValue(),
 								taskPerformer);
@@ -247,6 +255,8 @@ public class PenForm {
 					myTimer.start();
 				} else {
 					btnStartStop.setText("Start");
+					paramsCom0= null;
+					conCom0.close();
 					myTimer.stop();
 				}
 			}
@@ -268,358 +278,119 @@ public class PenForm {
 		});
 
 		GroupLayout groupLayout = new GroupLayout(frame.getContentPane());
-		groupLayout
-				.setHorizontalGroup(groupLayout
-						.createParallelGroup(Alignment.LEADING)
-						.addGroup(
-								groupLayout
-										.createSequentialGroup()
-										.addGroup(
-												groupLayout
-														.createParallelGroup(
-																Alignment.LEADING)
-														.addGroup(
-																groupLayout
-																		.createSequentialGroup()
-																		.addComponent(
-																				btnStartStop)
-																		.addPreferredGap(
-																				ComponentPlacement.UNRELATED)
-																		.addComponent(
-																				btnClearLog))
-														.addGroup(
-																groupLayout
-																		.createSequentialGroup()
-																		.addGroup(
-																				groupLayout
-																						.createParallelGroup(
-																								Alignment.LEADING,
-																								false)
-																						.addGroup(
-																								groupLayout
-																										.createSequentialGroup()
-																										.addGap(95)
-																										.addComponent(
-																												lblLpw))
-																						.addGroup(
-																								groupLayout
-																										.createSequentialGroup()
-																										.addContainerGap()
-																										.addGroup(
-																												groupLayout
-																														.createParallelGroup(
-																																Alignment.LEADING)
-																														.addComponent(
-																																lblNewLabel)
-																														.addComponent(
-																																lblSpeed))
-																										.addGap(38)
-																										.addGroup(
-																												groupLayout
-																														.createParallelGroup(
-																																Alignment.TRAILING)
-																														.addComponent(
-																																comboBoxSpeed0,
-																																GroupLayout.PREFERRED_SIZE,
-																																141,
-																																GroupLayout.PREFERRED_SIZE)
-																														.addComponent(
-																																comboBoxPort0,
-																																GroupLayout.PREFERRED_SIZE,
-																																141,
-																																GroupLayout.PREFERRED_SIZE)))
-																						.addGroup(
-																								groupLayout
-																										.createSequentialGroup()
-																										.addContainerGap()
-																										.addGroup(
-																												groupLayout
-																														.createParallelGroup(
-																																Alignment.TRAILING)
-																														.addComponent(
-																																label)
-																														.addComponent(
-																																lblNewLabel_1))
-																										.addPreferredGap(
-																												ComponentPlacement.UNRELATED)
-																										.addGroup(
-																												groupLayout
-																														.createParallelGroup(
-																																Alignment.LEADING)
-																														.addGroup(
-																																groupLayout
-																																		.createSequentialGroup()
-																																		.addComponent(
-																																				comboBoxStopBits0,
-																																				GroupLayout.PREFERRED_SIZE,
-																																				133,
-																																				GroupLayout.PREFERRED_SIZE)
-																																		.addPreferredGap(
-																																				ComponentPlacement.RELATED))
-																														.addComponent(
-																																comboBoxPar0,
-																																0,
-																																GroupLayout.DEFAULT_SIZE,
-																																Short.MAX_VALUE))))
-																		.addGroup(
-																				groupLayout
-																						.createParallelGroup(
-																								Alignment.LEADING)
-																						.addGroup(
-																								groupLayout
-																										.createSequentialGroup()
-																										.addGap(33)
-																										.addGroup(
-																												groupLayout
-																														.createParallelGroup(
-																																Alignment.LEADING)
-																														.addComponent(
-																																comboBoxStopBits1,
-																																GroupLayout.PREFERRED_SIZE,
-																																133,
-																																GroupLayout.PREFERRED_SIZE)
-																														.addGroup(
-																																groupLayout
-																																		.createParallelGroup(
-																																				Alignment.TRAILING,
-																																				false)
-																																		.addComponent(
-																																				comboBoxPar1,
-																																				Alignment.LEADING,
-																																				0,
-																																				GroupLayout.DEFAULT_SIZE,
-																																				Short.MAX_VALUE)
-																																		.addComponent(
-																																				comboBoxSpeed1,
-																																				Alignment.LEADING,
-																																				0,
-																																				GroupLayout.DEFAULT_SIZE,
-																																				Short.MAX_VALUE)
-																																		.addComponent(
-																																				comboBoxPort1,
-																																				Alignment.LEADING,
-																																				0,
-																																				475,
-																																				Short.MAX_VALUE))))
-																						.addGroup(
-																								groupLayout
-																										.createSequentialGroup()
-																										.addGap(221)
-																										.addComponent(
-																												lblEnergyform))))
-														.addGroup(
-																groupLayout
-																		.createSequentialGroup()
-																		.addContainerGap()
-																		.addGroup(
-																				groupLayout
-																						.createParallelGroup(
-																								Alignment.TRAILING)
-																						.addComponent(
-																								scrollPane,
-																								GroupLayout.PREFERRED_SIZE,
-																								829,
-																								GroupLayout.PREFERRED_SIZE)
-																						.addGroup(
-																								groupLayout
-																										.createSequentialGroup()
-																										.addComponent(
-																												lblNewLabel_2)
-																										.addPreferredGap(
-																												ComponentPlacement.UNRELATED)
-																										.addComponent(
-																												Ustavka,
-																												GroupLayout.PREFERRED_SIZE,
-																												79,
-																												GroupLayout.PREFERRED_SIZE)
-																										.addPreferredGap(
-																												ComponentPlacement.UNRELATED)
-																										.addComponent(
-																												lblNewLabel_3)
-																										.addPreferredGap(
-																												ComponentPlacement.UNRELATED)
-																										.addComponent(
-																												StepSetting,
-																												GroupLayout.PREFERRED_SIZE,
-																												73,
-																												GroupLayout.PREFERRED_SIZE)
-																										.addPreferredGap(
-																												ComponentPlacement.UNRELATED)
-																										.addComponent(
-																												label_1)
-																										.addPreferredGap(
-																												ComponentPlacement.UNRELATED)
-																										.addComponent(
-																												Gisterezis,
-																												GroupLayout.PREFERRED_SIZE,
-																												78,
-																												GroupLayout.PREFERRED_SIZE)
-																										.addPreferredGap(
-																												ComponentPlacement.UNRELATED)
-																										.addComponent(
-																												lblNewLabel_4)
-																										.addPreferredGap(
-																												ComponentPlacement.RELATED)
-																										.addComponent(
-																												ajustPeriod,
-																												GroupLayout.PREFERRED_SIZE,
-																												98,
-																												GroupLayout.PREFERRED_SIZE)))))
-										.addContainerGap(16, Short.MAX_VALUE)));
-		groupLayout
-				.setVerticalGroup(groupLayout
-						.createParallelGroup(Alignment.LEADING)
-						.addGroup(
-								groupLayout
-										.createSequentialGroup()
-										.addGroup(
-												groupLayout
-														.createParallelGroup(
-																Alignment.BASELINE)
-														.addComponent(lblLpw)
-														.addComponent(
-																lblEnergyform))
-										.addGap(5)
-										.addGroup(
-												groupLayout
-														.createParallelGroup(
-																Alignment.BASELINE)
-														.addComponent(
-																lblNewLabel)
-														.addComponent(
-																comboBoxPort0,
-																GroupLayout.PREFERRED_SIZE,
-																GroupLayout.DEFAULT_SIZE,
-																GroupLayout.PREFERRED_SIZE)
-														.addComponent(
-																comboBoxPort1,
-																GroupLayout.PREFERRED_SIZE,
-																GroupLayout.DEFAULT_SIZE,
-																GroupLayout.PREFERRED_SIZE))
-										.addPreferredGap(
-												ComponentPlacement.UNRELATED)
-										.addGroup(
-												groupLayout
-														.createParallelGroup(
-																Alignment.LEADING)
-														.addComponent(lblSpeed)
-														.addGroup(
-																groupLayout
-																		.createParallelGroup(
-																				Alignment.BASELINE)
-																		.addComponent(
-																				comboBoxSpeed0,
-																				GroupLayout.PREFERRED_SIZE,
-																				GroupLayout.DEFAULT_SIZE,
-																				GroupLayout.PREFERRED_SIZE)
-																		.addComponent(
-																				comboBoxSpeed1,
-																				GroupLayout.PREFERRED_SIZE,
-																				23,
-																				GroupLayout.PREFERRED_SIZE)))
-										.addPreferredGap(
-												ComponentPlacement.UNRELATED)
-										.addGroup(
-												groupLayout
-														.createParallelGroup(
-																Alignment.LEADING)
-														.addGroup(
-																groupLayout
-																		.createParallelGroup(
-																				Alignment.BASELINE)
-																		.addComponent(
-																				comboBoxPar0,
-																				GroupLayout.PREFERRED_SIZE,
-																				GroupLayout.DEFAULT_SIZE,
-																				GroupLayout.PREFERRED_SIZE)
-																		.addComponent(
-																				label))
-														.addComponent(
-																comboBoxPar1,
-																GroupLayout.PREFERRED_SIZE,
-																GroupLayout.DEFAULT_SIZE,
-																GroupLayout.PREFERRED_SIZE))
-										.addGap(18)
-										.addGroup(
-												groupLayout
-														.createParallelGroup(
-																Alignment.LEADING)
-														.addGroup(
-																groupLayout
-																		.createSequentialGroup()
-																		.addGroup(
-																				groupLayout
-																						.createParallelGroup(
-																								Alignment.BASELINE)
-																						.addComponent(
-																								comboBoxStopBits0,
-																								GroupLayout.PREFERRED_SIZE,
-																								GroupLayout.DEFAULT_SIZE,
-																								GroupLayout.PREFERRED_SIZE)
-																						.addComponent(
-																								lblNewLabel_1))
-																		.addGap(30)
-																		.addGroup(
-																				groupLayout
-																						.createParallelGroup(
-																								Alignment.TRAILING)
-																						.addGroup(
-																								groupLayout
-																										.createParallelGroup(
-																												Alignment.BASELINE)
-																										.addComponent(
-																												Ustavka,
-																												GroupLayout.PREFERRED_SIZE,
-																												GroupLayout.DEFAULT_SIZE,
-																												GroupLayout.PREFERRED_SIZE)
-																										.addComponent(
-																												lblNewLabel_3)
-																										.addComponent(
-																												StepSetting,
-																												GroupLayout.PREFERRED_SIZE,
-																												GroupLayout.DEFAULT_SIZE,
-																												GroupLayout.PREFERRED_SIZE)
-																										.addComponent(
-																												label_1)
-																										.addComponent(
-																												Gisterezis,
-																												GroupLayout.PREFERRED_SIZE,
-																												22,
-																												GroupLayout.PREFERRED_SIZE)
-																										.addComponent(
-																												lblNewLabel_4))
-																						.addComponent(
-																								lblNewLabel_2)
-																						.addGroup(
-																								Alignment.LEADING,
-																								groupLayout
-																										.createSequentialGroup()
-																										.addComponent(
-																												ajustPeriod,
-																												GroupLayout.PREFERRED_SIZE,
-																												24,
-																												GroupLayout.PREFERRED_SIZE)
-																										.addPreferredGap(
-																												ComponentPlacement.RELATED))))
-														.addComponent(
-																comboBoxStopBits1,
-																GroupLayout.PREFERRED_SIZE,
-																GroupLayout.DEFAULT_SIZE,
-																GroupLayout.PREFERRED_SIZE))
-										.addGap(18)
-										.addComponent(scrollPane,
-												GroupLayout.DEFAULT_SIZE, 130,
-												Short.MAX_VALUE)
-										.addPreferredGap(
-												ComponentPlacement.RELATED)
-										.addGroup(
-												groupLayout
-														.createParallelGroup(
-																Alignment.BASELINE)
-														.addComponent(
-																btnStartStop)
-														.addComponent(
-																btnClearLog))));
+		groupLayout.setHorizontalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(btnStartStop)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(btnClearLog))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
+									.addGroup(groupLayout.createSequentialGroup()
+										.addContainerGap()
+										.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+											.addComponent(lblNewLabel)
+											.addComponent(lblSpeed))
+										.addGap(38)
+										.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+											.addComponent(comboBoxSpeed0, GroupLayout.PREFERRED_SIZE, 141, GroupLayout.PREFERRED_SIZE)
+											.addComponent(comboBoxPort0, GroupLayout.PREFERRED_SIZE, 141, GroupLayout.PREFERRED_SIZE)))
+									.addGroup(groupLayout.createSequentialGroup()
+										.addContainerGap()
+										.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+											.addComponent(label)
+											.addComponent(lblNewLabel_1))
+										.addPreferredGap(ComponentPlacement.UNRELATED)
+										.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+											.addComponent(comboBoxStopBits0, 0, 141, Short.MAX_VALUE)
+											.addComponent(comboBoxPar0, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+								.addGroup(groupLayout.createSequentialGroup()
+									.addGap(133)
+									.addComponent(lblLpw)))
+							.addGap(221)
+							.addComponent(lblEnergyform))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addContainerGap()
+							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+								.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 829, GroupLayout.PREFERRED_SIZE)
+								.addGroup(groupLayout.createSequentialGroup()
+									.addComponent(lblNewLabel_2)
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addComponent(Ustavka, GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addComponent(lblNewLabel_3)
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addComponent(StepSetting, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+										.addGroup(groupLayout.createSequentialGroup()
+											.addComponent(label_1)
+											.addPreferredGap(ComponentPlacement.UNRELATED)
+											.addComponent(Gisterezis, GroupLayout.PREFERRED_SIZE, 78, GroupLayout.PREFERRED_SIZE)
+											.addPreferredGap(ComponentPlacement.UNRELATED)
+											.addComponent(lblNewLabel_4)
+											.addPreferredGap(ComponentPlacement.RELATED)
+											.addComponent(ajustPeriod, GroupLayout.PREFERRED_SIZE, 98, GroupLayout.PREFERRED_SIZE))
+										.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
+											.addComponent(comboBoxStopBits1, Alignment.LEADING, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+											.addComponent(comboBoxPar1, Alignment.LEADING, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+											.addComponent(comboBoxSpeed1, Alignment.LEADING, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+											.addComponent(comboBoxPort1, Alignment.LEADING, 0, 163, Short.MAX_VALUE)))))))
+					.addContainerGap(16, Short.MAX_VALUE))
+		);
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblEnergyform)
+						.addComponent(lblLpw))
+					.addGap(5)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+								.addComponent(lblNewLabel)
+								.addComponent(comboBoxPort0, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addComponent(lblSpeed)
+								.addComponent(comboBoxSpeed0, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+								.addComponent(comboBoxPar0, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(label))
+							.addGap(18)
+							.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+								.addComponent(comboBoxStopBits0, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblNewLabel_1)))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(comboBoxPort1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(comboBoxSpeed1, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(comboBoxPar1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addGap(18)
+							.addComponent(comboBoxStopBits1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+					.addGap(30)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+							.addComponent(Ustavka, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addComponent(lblNewLabel_3)
+							.addComponent(StepSetting, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addComponent(label_1)
+							.addComponent(Gisterezis, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE)
+							.addComponent(lblNewLabel_4))
+						.addComponent(lblNewLabel_2)
+						.addComponent(ajustPeriod, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnStartStop)
+						.addComponent(btnClearLog)))
+		);
 		scrollPane.setViewportView(listOutput);
 		frame.getContentPane().setLayout(groupLayout);
 

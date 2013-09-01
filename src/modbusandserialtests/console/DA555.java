@@ -26,6 +26,7 @@ import net.wimpi.modbus.msg.ModbusRequest;
 import net.wimpi.modbus.msg.ModbusResponse;
 import net.wimpi.modbus.msg.ReadInputRegistersRequest;
 import net.wimpi.modbus.msg.ReadInputRegistersResponse;
+import net.wimpi.modbus.msg.ReadMultipleRegistersRequest;
 import net.wimpi.modbus.msg.WriteMultipleRegistersRequest;
 import net.wimpi.modbus.net.SerialConnection;
 import net.wimpi.modbus.procimg.InputRegister;
@@ -148,7 +149,8 @@ public class DA555 {
 //			}
 			
 			// 5. Prepare a request
-			req = new ReadInputRegistersRequest(ref, count);
+			/////req = new ReadInputRegistersRequest(ref, count);
+			req = new ReadMultipleRegistersRequest(ref, count);
 			req.setUnitID(unitid);
 			req.setHeadless();
 			//if (Modbus.debug)

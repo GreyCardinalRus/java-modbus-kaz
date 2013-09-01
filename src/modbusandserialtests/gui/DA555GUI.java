@@ -9,7 +9,7 @@ import javax.swing.JMenuItem;
 import java.util.ResourceBundle;
 import javax.swing.JButton;
 
-import com.sun.prism.paint.Stop;
+//import com.sun.prism.paint.Stop;
 
 import modbusandserialtests.trash.DialogAbout;
 
@@ -32,6 +32,7 @@ import net.wimpi.modbus.net.SerialConnection;
 import net.wimpi.modbus.procimg.InputRegister;
 import net.wimpi.modbus.procimg.Register;
 import net.wimpi.modbus.util.SerialParameters;
+import net.wimpi.modbus.gui.DialogSerialParameters;
 
 public class DA555GUI {
 	static int numPorts=8;
