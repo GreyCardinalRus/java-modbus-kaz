@@ -5,8 +5,31 @@
  */
 package da555;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ButtonGroup;
+import javax.swing.ButtonModel;
+import jssc.SerialPort;
+import jssc.SerialPortList;
+import net.wimpi.modbus.Modbus;
+import net.wimpi.modbus.ModbusCoupler;
+import net.wimpi.modbus.ModbusException;
+import net.wimpi.modbus.ModbusSlaveException;
 import net.wimpi.modbus.gui.DialogSerialParameters;
+import net.wimpi.modbus.io.ModbusSerialTransaction;
+import net.wimpi.modbus.msg.DA555ReadID;
+import net.wimpi.modbus.msg.ModbusRequest;
+import net.wimpi.modbus.msg.ModbusResponse;
+import net.wimpi.modbus.msg.WriteMultipleRegistersRequest;
+import net.wimpi.modbus.net.SerialConnection;
+import net.wimpi.modbus.procimg.InputRegister;
+import net.wimpi.modbus.procimg.Register;
+import net.wimpi.modbus.util.SerialParameters;
+import javax.swing.Timer;
+import net.wimpi.modbus.ModbusIOException;
+import net.wimpi.modbus.msg.ReadMultipleRegistersRequest;
 
 /**
  *
@@ -14,18 +37,98 @@ import net.wimpi.modbus.gui.DialogSerialParameters;
  */
 public class MaticProDA555 extends javax.swing.JFrame {
 
+    SerialConnection con = null;
+    ModbusSerialTransaction trans = null;
+    ModbusRequest req = null;
+    ModbusResponse rres = null;
+    WriteMultipleRegistersRequest wmreq = null;
+    SerialParameters params = new SerialParameters();
+    int unitid = 1;
+    Timer myTimer = null;
+    Integer totalcount = 0;
+    ButtonGroup group = new ButtonGroup();
+
+    void mainwork() {
+        // Тут чтото делаем очень важное!
+        // TODO Читаем регистры
+        // 5. Prepare a request
+
+        int ref = 100, count = 0x06;
+        req = new ReadMultipleRegistersRequest(ref, count);
+        req.setUnitID(unitid);
+        req.setHeadless();
+
+        // 6. Prepare the transaction
+        trans = new ModbusSerialTransaction(con);
+        trans.setRequest(req);
+        System.out.println("---");
+        // 7. Execute the transaction repeat times
+        try {
+            trans.execute();
+        } catch (ModbusIOException e) {
+            // TODO Auto-generated catch block
+            System.out.println("ModbusIOException");
+            e.printStackTrace();
+            return;
+        } catch (ModbusSlaveException e) {
+            // TODO Auto-generated catch block
+            System.out.println("ModbusSlaveException");
+            e.printStackTrace();
+            return;
+        } catch (ModbusException e) {
+            // TODO Auto-generated catch block
+            System.out.println("ModbusSlaveException");
+            e.printStackTrace();
+            return;
+        }
+
+        rres = trans.getResponse();
+        System.out.println("totalcount=" + (++totalcount));
+        for (int n = 0; n < rres.getWordCount(); n++) {
+            //listModel.addElement("Word " + n + "=" + rres.getRegisterValue(n));
+            System.out.println("Word " + n + "=" + rres.getRegisterValue(n));
+            //int index = listModel.size() - 1;
+            //listOutput.setSelectedIndex(index);
+            //listOutput.ensureIndexIsVisible(index);
+            // System.out.println("Word " + n + "="
+            // + rres.getRegisterValue(n));
+        }
+    }
+
+    /**
+     * Initialize the contents of the frame.
+     */
+    ActionListener taskPerformer = new ActionListener() {
+        public void actionPerformed(ActionEvent evt) {
+            // ...Perform a task...
+            // System.out.println("Times ap");
+            //btnStartStop.setText("Working... " + (++workTime)
+            //		+ " cicles. Stop?");
+            mainwork();
+        }
+    };
+
     /**
      * Creates new form MaticProDA555
      */
     public MaticProDA555() {
-        initComponents();
-        ButtonGroup group = new ButtonGroup();
+        initComponents(); 
+        String portname = null;
+
+        String[] ports = SerialPortList.getPortNames();
+        if (ports.length > 0) {
+            portname = ports[0];
+        }
+        params.setPortName(portname);
+       
         group.add(jRadioButtonMenuItem50mc);
         group.add(jRadioButtonMenuItem100mc);
         group.add(jRadioButtonMenuItem200mc);
         group.add(jRadioButtonMenuItem500mc);
         group.add(jRadioButtonMenuItem1000mc);
         group.add(jRadioButtonMenuItem2000mc);
+        group.setSelected(jRadioButtonMenuItem1000mc.getModel(), true);
+ //       group.setSelected(((ButtonModel) jRadioButtonMenuItem1000mc, true);
 
     }
 
@@ -39,17 +142,14 @@ public class MaticProDA555 extends javax.swing.JFrame {
     private void initComponents() {
 
         desktopPane = new javax.swing.JDesktopPane();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextPaneStatusBar = new javax.swing.JTextPane();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         openMenuItem = new javax.swing.JMenuItem();
         saveMenuItem = new javax.swing.JMenuItem();
         saveAsMenuItem = new javax.swing.JMenuItem();
         exitMenuItem = new javax.swing.JMenuItem();
-        editMenu = new javax.swing.JMenu();
-        cutMenuItem = new javax.swing.JMenuItem();
-        copyMenuItem = new javax.swing.JMenuItem();
-        pasteMenuItem = new javax.swing.JMenuItem();
-        deleteMenuItem = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
         jRadioButtonMenuItem50mc = new javax.swing.JRadioButtonMenuItem();
@@ -59,11 +159,20 @@ public class MaticProDA555 extends javax.swing.JFrame {
         jRadioButtonMenuItem1000mc = new javax.swing.JRadioButtonMenuItem();
         jRadioButtonMenuItem2000mc = new javax.swing.JRadioButtonMenuItem();
         jMenuPortSettings = new javax.swing.JMenuItem();
+        ConnectjMenuItem = new javax.swing.JMenuItem();
         helpMenu = new javax.swing.JMenu();
         contentMenuItem = new javax.swing.JMenuItem();
         aboutMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jTextPaneStatusBar.setEditable(false);
+        jTextPaneStatusBar.setText("status bar...");
+        jTextPaneStatusBar.setAutoscrolls(false);
+        jScrollPane1.setViewportView(jTextPaneStatusBar);
+
+        desktopPane.add(jScrollPane1);
+        jScrollPane1.setBounds(0, 260, 400, 24);
 
         fileMenu.setMnemonic('f');
         fileMenu.setText("Файл");
@@ -92,51 +201,36 @@ public class MaticProDA555 extends javax.swing.JFrame {
 
         menuBar.add(fileMenu);
 
-        editMenu.setMnemonic('e');
-        editMenu.setText("Edit");
-
-        cutMenuItem.setMnemonic('t');
-        cutMenuItem.setText("Cut");
-        editMenu.add(cutMenuItem);
-
-        copyMenuItem.setMnemonic('y');
-        copyMenuItem.setText("Copy");
-        editMenu.add(copyMenuItem);
-
-        pasteMenuItem.setMnemonic('p');
-        pasteMenuItem.setText("Paste");
-        editMenu.add(pasteMenuItem);
-
-        deleteMenuItem.setMnemonic('d');
-        deleteMenuItem.setText("Delete");
-        editMenu.add(deleteMenuItem);
-
-        menuBar.add(editMenu);
-
         jMenu1.setText("Настройки");
 
         jMenu2.setText("Частота опроса");
 
+        jRadioButtonMenuItem50mc.setMnemonic('2');
         jRadioButtonMenuItem50mc.setSelected(true);
         jRadioButtonMenuItem50mc.setText("50 мс");
         jMenu2.add(jRadioButtonMenuItem50mc);
 
+        jRadioButtonMenuItem100mc.setMnemonic('d');
         jRadioButtonMenuItem100mc.setSelected(true);
         jRadioButtonMenuItem100mc.setText("100 mc");
         jMenu2.add(jRadioButtonMenuItem100mc);
 
+        jRadioButtonMenuItem200mc.setMnemonic('\u00c8');
         jRadioButtonMenuItem200mc.setSelected(true);
         jRadioButtonMenuItem200mc.setText("200 mc");
         jMenu2.add(jRadioButtonMenuItem200mc);
 
+        jRadioButtonMenuItem500mc.setMnemonic('\u01f4');
         jRadioButtonMenuItem500mc.setSelected(true);
         jRadioButtonMenuItem500mc.setText("500 mc");
         jMenu2.add(jRadioButtonMenuItem500mc);
 
+        jRadioButtonMenuItem1000mc.setMnemonic('\u03e8');
         jRadioButtonMenuItem1000mc.setSelected(true);
         jRadioButtonMenuItem1000mc.setText("1 000 mc");
         jMenu2.add(jRadioButtonMenuItem1000mc);
 
+        jRadioButtonMenuItem2000mc.setMnemonic('\u07d0');
         jRadioButtonMenuItem2000mc.setSelected(true);
         jRadioButtonMenuItem2000mc.setText("2 000 mc");
         jMenu2.add(jRadioButtonMenuItem2000mc);
@@ -150,6 +244,14 @@ public class MaticProDA555 extends javax.swing.JFrame {
             }
         });
         jMenu1.add(jMenuPortSettings);
+
+        ConnectjMenuItem.setText("соединиться");
+        ConnectjMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ConnectjMenuItemActionPerformed(evt);
+            }
+        });
+        jMenu1.add(ConnectjMenuItem);
 
         menuBar.add(jMenu1);
 
@@ -187,10 +289,77 @@ public class MaticProDA555 extends javax.swing.JFrame {
     }//GEN-LAST:event_exitMenuItemActionPerformed
 
     private void jMenuPortSettingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuPortSettingsActionPerformed
-        DialogSerialParameters ds = new DialogSerialParameters();
+        DialogSerialParameters ds = new DialogSerialParameters(params);
         //      ds.setVisible(true);// TODO add your handling code here:
         desktopPane.add(ds);
     }//GEN-LAST:event_jMenuPortSettingsActionPerformed
+
+    private void ConnectjMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ConnectjMenuItemActionPerformed
+        // TODO add your handling code here:
+        // 2. Set slave identifier for master response parsing
+        if (myTimer == null) {
+            myTimer = new Timer((Integer) 1000,
+                    taskPerformer);
+        }
+        if (myTimer.isRunning()) {
+            con.close();
+            myTimer.stop();
+            ConnectjMenuItem.setText("Соединиться");
+            return;
+        }
+        ModbusCoupler.getReference().setUnitID(unitid);
+        // 3. Setup serial parameters
+        int ref = 100;
+
+        InputRegister[] registers = new Register[100];
+
+        params.setBaudRate(SerialPort.BAUDRATE_19200);
+        params.setDatabits(SerialPort.DATABITS_8);
+        params.setParity(SerialPort.PARITY_NONE);
+        params.setStopbits(SerialPort.STOPBITS_1);
+        params.setEncoding(Modbus.SERIAL_ENCODING_RTU);
+        params.setEcho(false);
+        if (Modbus.debug) {
+            System.out.println("Encoding [" + params.getEncoding() + "]");
+        }
+
+        // 4. Open the connection
+        con = new SerialConnection(params);
+        try {
+            con.open();
+            ///777
+            System.out.println("Get DA-555 id");
+            req = new DA555ReadID(ref);
+            req.setUnitID(unitid);
+            req.setHeadless();
+            trans = new ModbusSerialTransaction(con);
+            trans.setRequest(req);
+            trans.execute();
+            rres = trans.getResponse();
+//			System.out.println("Decode...");
+            registers = rres.getRegisters();
+            int NCh = registers[0].toBytes()[0];
+            System.out.println("NCh         = " + registers[0].toBytes()[0]);
+            System.out.println("NInK        = " + registers[0].toBytes()[1]);//	          NInK:=ComBufRX[4];
+            System.out.println("PrgrmDate   = " + registers[1].toBytes()[0]);//	          PrgrmDate:=ComBufRX[5];
+            System.out.println("PrgrmMounth = " + registers[1].toBytes()[1]);//	          PrgrmMounth:=ComBufRX[6];
+            System.out.println("PrgrmYear   = " + (2000 + registers[2].toBytes()[0]));//	          PrgrmYear:=2000+ComBufRX[7];
+            ButtonModel wg=group.getSelection();
+            //wg.
+            myTimer.setDelay(wg.getMnemonic());
+            myTimer.start();
+            ConnectjMenuItem.setText("Отсоединиться");
+        } catch (Exception ex) {
+            con.close();
+            Logger.getLogger(MaticProDA555.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        //catch (ModbusSlaveException ex) {
+        //              Logger.getLogger(MaticProDA555.class.getName()).log(Level.SEVERE, null, ex);
+        //           } catch (ModbusException ex) {
+        //                Logger.getLogger(MaticProDA555.class.getName()).log(Level.SEVERE, null, ex);
+        //            }
+
+    }//GEN-LAST:event_ConnectjMenuItemActionPerformed
 
     /**
      * @param args the command line arguments
@@ -228,13 +397,10 @@ public class MaticProDA555 extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem ConnectjMenuItem;
     private javax.swing.JMenuItem aboutMenuItem;
     private javax.swing.JMenuItem contentMenuItem;
-    private javax.swing.JMenuItem copyMenuItem;
-    private javax.swing.JMenuItem cutMenuItem;
-    private javax.swing.JMenuItem deleteMenuItem;
     private javax.swing.JDesktopPane desktopPane;
-    private javax.swing.JMenu editMenu;
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JMenu helpMenu;
@@ -247,9 +413,10 @@ public class MaticProDA555 extends javax.swing.JFrame {
     private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem200mc;
     private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem500mc;
     private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem50mc;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextPane jTextPaneStatusBar;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem openMenuItem;
-    private javax.swing.JMenuItem pasteMenuItem;
     private javax.swing.JMenuItem saveAsMenuItem;
     private javax.swing.JMenuItem saveMenuItem;
     // End of variables declaration//GEN-END:variables

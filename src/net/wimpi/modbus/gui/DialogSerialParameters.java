@@ -6,17 +6,19 @@
 package net.wimpi.modbus.gui;
 
 import jssc.SerialPortList;
+import net.wimpi.modbus.util.SerialParameters;
 
 /**
  *
  * @author valentin
  */
 public class DialogSerialParameters extends javax.swing.JPanel {
-
+    SerialParameters params=null;
     /**
      * Creates new form DialogSerialParameters
      */
-    public DialogSerialParameters() {
+    public DialogSerialParameters(SerialParameters params) {
+        this.params  =params;
         initComponents();
 
         String[] ports = SerialPortList.getPortNames();
@@ -24,6 +26,7 @@ public class DialogSerialParameters extends javax.swing.JPanel {
         for (String port : ports) {
             jComboBoxPortName.addItem(port);
         }
+        jComboBoxPortName.setSelectedItem(params.getPortName());
         setSize(375, 211);
         jComboBoxBaudrate.setSelectedIndex(7);
         jComboBoxDataBits.setSelectedIndex(3);
@@ -147,6 +150,7 @@ public class DialogSerialParameters extends javax.swing.JPanel {
 
     private void jButtonOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOkActionPerformed
         //Aply
+        params.setPortName((String) jComboBoxPortName.getSelectedItem());
         setVisible(false);
         // TODO add your handling code here:
     }//GEN-LAST:event_jButtonOkActionPerformed

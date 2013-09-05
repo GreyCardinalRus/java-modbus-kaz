@@ -72,8 +72,8 @@ public class DA555 {
 		
 		String portname = null;
 		int unitid = 1;
-		int ref = 2;
-		int count = ((9*2+1)*1+1);
+		int ref = 100;
+		int count = 20;//((9*2+1)*1+1);
 		int repeat = 1;
 		InputRegister[]  registers = new Register[count];
 		try {
