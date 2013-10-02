@@ -1,8 +1,6 @@
 package mvc.views;
 
-import java.awt.Color;
 
-import java.awt.Color;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -13,7 +11,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JComboBox;
-import javax.swing.LayoutStyle.ComponentPlacement;
+
 import javax.swing.JMenuBar;
 import javax.swing.UIManager;
 import javax.swing.JButton;
@@ -138,12 +136,18 @@ public class PenFormView {
 					dataset.removeColumn(" " + (isSimulation-imax));
 					//System.out.println("Delete "+i);
 				}
-				try {
-					Thread.sleep(100); // спать 1000 милисекунд.
-				} catch (Exception e) {
-					System.out
-							.println("Что-то пошло не так, но бог здесь не причём, ибо его нет. Это просто какой-то косяк, который можно объяснить.");
-				}
+				listModel.addElement("Word " + isSimulation + "="
+						+ isSimulation);
+				int index = listModel.size() - 1;
+				listOutput.setSelectedIndex(index);
+				listOutput.ensureIndexIsVisible(index);
+
+//				try {
+//					Thread.sleep(100); // спать 1000 милисекунд.
+//				} catch (Exception e) {
+//					System.out
+//							.println("Что-то пошло не так, но бог здесь не причём, ибо его нет. Это просто какой-то косяк, который можно объяснить.");
+//				}
 			//}
 				isSimulation++;
 		} else {
@@ -236,12 +240,11 @@ public class PenFormView {
 		chartPanel = new ChartPanel(chart);
 		IndicatorsPanel.add(chartPanel);
 		chartPanel.setLayout(new BorderLayout(0, 0));
-		JPanel MainPanel = new JPanel();
-		tabbedPane.addTab("Лог", null, MainPanel, null);
-		MainPanel.add(listOutput);
+		JPanel LogPanel = new JPanel();
+		tabbedPane.addTab("Лог", null, LogPanel, null);
+		LogPanel.setLayout(new BorderLayout(0, 0));
+		LogPanel.add(listOutput, BorderLayout.NORTH);
 
-		JScrollPane scrollPane = new JScrollPane();
-		MainPanel.add(scrollPane);
 
 		tabbedPane.addTab("Настройки", null, SettingsPanel, null);
 		SettingsPanel.setLayout(null);
@@ -327,6 +330,8 @@ public class PenFormView {
 		JLabel lblEnergyform = new JLabel("EnergyForm");
 		lblEnergyform.setBounds(339, 9, 160, 15);
 		SettingsPanel.add(lblEnergyform);
+		JScrollPane scrollPane = new JScrollPane();
+		tabbedPane.addTab("New tab", null, scrollPane, null);
 		frame.getContentPane().setLayout(groupLayout);
 
 		JMenuBar menuBar = new JMenuBar();
