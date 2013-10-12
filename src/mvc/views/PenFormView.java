@@ -232,9 +232,7 @@ public class PenFormView extends JPanel// JFrame
 	private final JComboBox<String> comboBoxPar2 = new JComboBox<String>();
 	private final JComboBox<String> comboBoxStopBits2 = new JComboBox<String>();
 	private JSpinner windowChartWidth;
-	private final JLabel label_4 = new JLabel("");
-	private final JLabel label_23 = new JLabel("");
-	private final JLabel label_24 = new JLabel("");
+
 
 	private void initialize() {
 		//
@@ -261,13 +259,14 @@ public class PenFormView extends JPanel// JFrame
 		chartPanel.setLayout(new BorderLayout(0, 0));
 		JPanel LogPanel = new JPanel();
 		tabbedPane.addTab("Log", null, LogPanel, null);
-		LogPanel.setLayout(new BorderLayout(0, 0));
+		LogPanel.setLayout(new BorderLayout());
+		JButton btnClearLog = new JButton("Clear log...");
+		LogPanel.add(btnClearLog, BorderLayout.PAGE_START);	
 		LogPanel.add(listOutput, BorderLayout.NORTH);
 		JScrollPane scrollPane = new JScrollPane();
 		LogPanel.add(scrollPane, BorderLayout.SOUTH);
 		
-		JButton btnClearLog = new JButton("Clear log...");
-		LogPanel.add(btnClearLog, BorderLayout.WEST);
+
 		btnClearLog.setVerticalAlignment(SwingConstants.TOP);
 		btnClearLog.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -276,9 +275,9 @@ public class PenFormView extends JPanel// JFrame
 		});
 
 		tabbedPane.addTab("Settings", null, SettingsPanel, null);
-		SettingsPanel.setLayout(new GridLayout(0, 4, 0, 0));
+		SettingsPanel.setLayout(new GridLayout(0, 6, 0, 0));
 		
-		SettingsPanel.add(label_4);
+		SettingsPanel.add(new JLabel(""));SettingsPanel.add(new JLabel(""));
 
 		JLabel lblLpw = new JLabel("LPW-305");
 		SettingsPanel.add(lblLpw);
@@ -288,61 +287,68 @@ public class PenFormView extends JPanel// JFrame
 
 		JLabel lblNewLabel_5 = new JLabel("DA5XXX");
 		SettingsPanel.add(lblNewLabel_5);
-																
-																		JLabel lblNewLabel = new JLabel("Port");
-																		SettingsPanel.add(lblNewLabel);
-																SettingsPanel.add(comboBoxPort0);
-																SettingsPanel.add(comboBoxPort1);
-														
-																JComboBox<String> comboBoxPort2 = new JComboBox<String>();
-																SettingsPanel.add(comboBoxPort2);
-												
-														JLabel lblSpeed = new JLabel("Speed");
-														SettingsPanel.add(lblSpeed);
-												SettingsPanel.add(comboBoxSpeed0);
-												comboBoxSpeed0.setModel(new javax.swing.DefaultComboBoxModel<String>(
-														new String[] { "110", "300", "600", "1200", "4800", "9600",
-																"14400", "19200", "38400", "57600", "115200" }));
-												comboBoxSpeed0.setSelectedIndex(7);
-												SettingsPanel.add(comboBoxSpeed1);
-												comboBoxSpeed1.setModel(new javax.swing.DefaultComboBoxModel<String>(
-														new String[] { "110", "300", "600", "1200", "4800", "9600",
-																"14400", "19200", "38400", "57600", "115200" }));
-												comboBoxSpeed1.setSelectedIndex(7);
-												comboBoxSpeed2.setModel(new DefaultComboBoxModel(new String[] { "110",
-														"300", "600", "1200", "4800", "9600", "14400", "19200",
-														"38400", "57600", "115200" }));
-												comboBoxSpeed2.setSelectedIndex(7);
-												
-														SettingsPanel.add(comboBoxSpeed2);
-										
-												JLabel label = new JLabel("Parity");
-												SettingsPanel.add(label);
-										SettingsPanel.add(comboBoxPar0);
-										comboBoxPar0.setModel(new javax.swing.DefaultComboBoxModel<String>(
-												new String[] { "None", "Odd", "Even", "Mark", "Space" }));
-										SettingsPanel.add(comboBoxPar1);
-										comboBoxPar1.setModel(new DefaultComboBoxModel(new String[] { "None",
-												"Odd", "Even", "Mark", "Space" }));
-										comboBoxPar2.setModel(new DefaultComboBoxModel(new String[] { "None",
-												"Odd", "Even", "Mark", "Space" }));
-										
-												SettingsPanel.add(comboBoxPar2);
+		SettingsPanel.add(new JLabel(""));SettingsPanel.add(new JLabel(""));
+		JLabel lblNewLabel = new JLabel("Port");
+		SettingsPanel.add(lblNewLabel);
+SettingsPanel.add(comboBoxPort0);
+SettingsPanel.add(comboBoxPort1);
+
+		JComboBox<String> comboBoxPort2 = new JComboBox<String>();
+		SettingsPanel.add(comboBoxPort2);
+SettingsPanel.add(new JLabel(""));
+		SettingsPanel.add(new JLabel(""));
+		JLabel lblSpeed = new JLabel("Speed");
+		SettingsPanel.add(lblSpeed);
+SettingsPanel.add(comboBoxSpeed0);
+comboBoxSpeed0.setModel(new javax.swing.DefaultComboBoxModel<String>(
+		new String[] { "110", "300", "600", "1200", "4800", "9600",
+				"14400", "19200", "38400", "57600", "115200" }));
+comboBoxSpeed0.setSelectedIndex(7);
+SettingsPanel.add(comboBoxSpeed1);
+comboBoxSpeed1.setModel(new javax.swing.DefaultComboBoxModel<String>(
+		new String[] { "110", "300", "600", "1200", "4800", "9600",
+				"14400", "19200", "38400", "57600", "115200" }));
+comboBoxSpeed1.setSelectedIndex(7);
+comboBoxSpeed2.setModel(new DefaultComboBoxModel(new String[] { "110",
+		"300", "600", "1200", "4800", "9600", "14400", "19200",
+		"38400", "57600", "115200" }));
+comboBoxSpeed2.setSelectedIndex(7);
+
+		SettingsPanel.add(comboBoxSpeed2);
+SettingsPanel.add(new JLabel(""));
+		SettingsPanel.add(new JLabel(""));
+		JLabel label = new JLabel("Parity");
+		SettingsPanel.add(label);
+SettingsPanel.add(comboBoxPar0);
+comboBoxPar0.setModel(new javax.swing.DefaultComboBoxModel<String>(
+		new String[] { "None", "Odd", "Even", "Mark", "Space" }));
+SettingsPanel.add(comboBoxPar1);
+comboBoxPar1.setModel(new DefaultComboBoxModel(new String[] { "None",
+		"Odd", "Even", "Mark", "Space" }));
+comboBoxPar2.setModel(new DefaultComboBoxModel(new String[] { "None",
+		"Odd", "Even", "Mark", "Space" }));
+
+		SettingsPanel.add(comboBoxPar2);
+SettingsPanel.add(new JLabel(""));
+		SettingsPanel.add(new JLabel(""));
+		JLabel lblNewLabel_1 = new JLabel("StopBits");
+		SettingsPanel.add(lblNewLabel_1);
+SettingsPanel.add(comboBoxStopBits0);
+comboBoxStopBits0
+		.setModel(new javax.swing.DefaultComboBoxModel<String>(
+				new String[] { "1", "1.5", "2" }));
+SettingsPanel.add(comboBoxStopBits1);
+comboBoxStopBits1
+		.setModel(new javax.swing.DefaultComboBoxModel<String>(
+				new String[] { "1", "1.5", "2" }));
+comboBoxStopBits2.setModel(new DefaultComboBoxModel(new String[] { "1",
+		"1.5", "2" }));
+
+		SettingsPanel.add(comboBoxStopBits2);
+SettingsPanel.add(new JLabel(""));
 								
-										JLabel lblNewLabel_1 = new JLabel("StopBits");
-										SettingsPanel.add(lblNewLabel_1);
-								SettingsPanel.add(comboBoxStopBits0);
-								comboBoxStopBits0
-										.setModel(new javax.swing.DefaultComboBoxModel<String>(
-												new String[] { "1", "1.5", "2" }));
-								SettingsPanel.add(comboBoxStopBits1);
-								comboBoxStopBits1
-										.setModel(new javax.swing.DefaultComboBoxModel<String>(
-												new String[] { "1", "1.5", "2" }));
-								comboBoxStopBits2.setModel(new DefaultComboBoxModel(new String[] { "1",
-										"1.5", "2" }));
-								
-										SettingsPanel.add(comboBoxStopBits2);
+SettingsPanel.add(new JLabel(""));
+
 						
 								JLabel lblNewLabel_2 = new JLabel("Ustavka");
 								SettingsPanel.add(lblNewLabel_2);
@@ -351,21 +357,22 @@ public class PenFormView extends JPanel// JFrame
 						SettingsPanel.add(label_1);
 						SettingsPanel.add(Gisterezis);
 						Gisterezis.setValue(1000);
+						SettingsPanel.add(new JLabel(""));
+						SettingsPanel.add(new JLabel(""));
+
+
 				
 						JLabel lblNewLabel_3 = new JLabel("Step setting");
 						SettingsPanel.add(lblNewLabel_3);
 				SettingsPanel.add(StepSetting);
 				StepSetting.setValue(100);
-				
-				SettingsPanel.add(label_23);
-				
-				SettingsPanel.add(label_24);
-				SettingsPanel.add(lblNewLabel_4);
-				SettingsPanel.add(ajustPeriod);
-				ajustPeriod.setValue(100);
-		
-				JLabel lblNewLabel_6 = new JLabel("chart width (dots)");
-				SettingsPanel.add(lblNewLabel_6);
+SettingsPanel.add(lblNewLabel_4);
+SettingsPanel.add(ajustPeriod);
+ajustPeriod.setValue(100);
+SettingsPanel.add(new JLabel(""));
+SettingsPanel.add(new JLabel(""));
+		JLabel lblNewLabel_6 = new JLabel("chart width (dots)");
+		SettingsPanel.add(lblNewLabel_6);
 
 		windowChartWidth = new JSpinner();
 		windowChartWidth.setModel(new SpinnerNumberModel(new Integer(100),
