@@ -1,13 +1,16 @@
 package mvc.models;
 
-public class PenFormModel {
+import mvc.PenFormMvc;
 
+public class PenFormModel {
+	 private PenFormMvc mvc = null;	
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+     public PenFormModel(PenFormMvc mvc) {
+      	this.mvc = mvc;
+    //          initialize(parientFrame);
+      }
 
-	}
 
 }
