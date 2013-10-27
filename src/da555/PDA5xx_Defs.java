@@ -15,14 +15,22 @@ import java.util.regex.MatchResult;
 import jssc.SerialPort;
 import jssc.SerialPortList;
 import net.wimpi.modbus.Modbus;
+import net.wimpi.modbus.ModbusException;
+import net.wimpi.modbus.ModbusIOException;
+import net.wimpi.modbus.ModbusSlaveException;
 import net.wimpi.modbus.io.ModbusSerialTransaction;
 import net.wimpi.modbus.msg.DA555ReadID;
 import net.wimpi.modbus.msg.ModbusRequest;
 import net.wimpi.modbus.msg.ModbusResponse;
 import net.wimpi.modbus.msg.WriteMultipleRegistersRequest;
+import net.wimpi.modbus.msg.WriteMultipleRegistersResponse;
+import net.wimpi.modbus.msg.WriteSingleRegisterRequest;
+import net.wimpi.modbus.msg.WriteSingleRegisterResponse;
 import net.wimpi.modbus.net.SerialConnection;
 import net.wimpi.modbus.procimg.InputRegister;
 import net.wimpi.modbus.procimg.Register;
+import net.wimpi.modbus.procimg.SimpleProcessImage;
+import net.wimpi.modbus.procimg.SimpleRegister;
 import net.wimpi.modbus.util.SerialParameters;
 
 public class PDA5xx_Defs {
@@ -40,17 +48,21 @@ public class PDA5xx_Defs {
 	}
 
 	public static void main(String[] args) {
+//		System.setProperty("net.wimpi.modbus.debug","true");
 		SerialConnection con = null;
 		ModbusSerialTransaction trans = null;
 		ModbusRequest req = null;
 		ModbusResponse rres = null;
-		WriteMultipleRegistersRequest wmreq = null;
+		SimpleProcessImage spi = null;
+		// Write Multiple Registers(Words)
+		WriteMultipleRegistersRequest write_mreq = null;
+		WriteMultipleRegistersResponse write_mres = null;
 		SerialParameters params = new SerialParameters();
 		String portname = null;
-		InputRegister[] registers = new Register[100];
+		// new Register[100];
+		int currRegNum = 0;
 		String fileName = "defs_1k.cfg";
-		// String stopWord = "$10 за лабу"
-
+		Integer WR_DA5XX_CC = 0;
 		BufferedReader reader;
 		String line;
 		try {
@@ -105,6 +117,7 @@ public class PDA5xx_Defs {
 			} else
 				System.out.println(portname);
 			int unitid = getValue("DA5XX_ADR");
+			Register[] out_registers = null;
 			params.setPortName(portname);
 			params.setBaudRate(SerialPort.BAUDRATE_19200);
 			params.setDatabits(SerialPort.DATABITS_8);
@@ -130,7 +143,7 @@ public class PDA5xx_Defs {
 				trans.execute();
 				rres = trans.getResponse();
 				// System.out.println("Decode...");
-				registers = rres.getRegisters();
+				InputRegister[] registers = rres.getRegisters();
 				int NCh = registers[0].toBytes()[0];
 				System.out
 						.println("NCh         = " + registers[0].toBytes()[0]);
@@ -153,17 +166,30 @@ public class PDA5xx_Defs {
 				while ((line = reader.readLine()) != null) {
 					if (line.startsWith("//")) {
 						// System.out.println(line);
-//					} else if (line.startsWith("$")) {
-//						System.out.println(line);
-//						break;
-					} else if (line.startsWith("! DA5XX !")) {
-						System.out.println(line);
+					} else if (line.startsWith("$")) {
+						// System.out.println(line);
+					} else if (line.startsWith("! WR_DA5XX_CC")) {
+						//System.out.println(line);
 						Scanner scanner = new Scanner(line);
-						//scanner.delimiter(" ! ");
-						scanner.next();scanner.next();scanner.next();
-						String fnName = scanner.next().substring(0);//System.out.println("fnName"+fnName);
+						// scanner.delimiter(" ! ");
 						scanner.next();
-						String pName = scanner.next().substring(0);//System.out.println("pName"+pName);
+						scanner.next();
+						scanner.next();
+						WR_DA5XX_CC = new Integer(scanner.next().substring(0));
+						System.out.println("WR_DA5XX_CC = " + WR_DA5XX_CC);
+						out_registers = new Register[WR_DA5XX_CC];
+						currRegNum = 0;
+						scanner.close();
+					} else if (line.startsWith("! DA5XX !")) {
+//						System.out.println(line);
+						Scanner scanner = new Scanner(line);
+						// scanner.delimiter(" ! ");
+						scanner.next();
+						scanner.next();
+						scanner.next();
+						String fnName = scanner.next().substring(0);// System.out.println("fnName"+fnName);
+						scanner.next();
+						String pName = scanner.next().substring(0);// System.out.println("pName"+pName);
 						scanner.next();
 						Integer value = new Integer(scanner.next().substring(0));
 						String comment = "";
@@ -171,9 +197,97 @@ public class PDA5xx_Defs {
 								&& line.indexOf("//") < (line.length() - 3))
 							comment = line.substring(line.indexOf("//"));
 						scanner.close();
-						System.out.println("Write fn="+getValue(fnName)+" param="+getValue(pName)+" value="+value+" comment="+comment);
-						//myMaches.add(new MyMaches(key, value, comment));
-					} else if (line.length() > 5)
+	//					System.out.println("Write fn=" + getValue(fnName)
+		//						+ " param=" + getValue(pName) + " value="
+			//					+ value + " comment=" + comment.substring(2));
+						out_registers[currRegNum++] = new SimpleRegister(value);
+//						WriteSingleRegisterRequest WriteReq = null; 
+//						WriteSingleRegisterResponse WriteRes = null;
+////						SimpleRegister MyReg = new SimpleRegister(1);
+//						//3. Prepare the request
+//						WriteReq = new WriteSingleRegisterRequest(getValue(pName),out_registers[currRegNum])	;
+//						WriteReq.setUnitID( unitid );
+//						WriteReq.setHeadless();
+////						WriteReq.setReference(getValue(pName));  //register number
+////							WriteReq.setRegister(out_registers[currRegNum]);
+//
+//						//4. Prepare the transaction
+////						trans = new ModbusTCPTransaction(con);
+//						//trans.setRequest(ReadReq);
+//						trans = new ModbusSerialTransaction(con);
+//						trans.setRequest(WriteReq);
+//						
+//						trans.setRetries(1);
+//									  
+//						try {
+//							trans.execute();
+//							System.out.println("Getting Response….");
+//							WriteRes = ( WriteSingleRegisterResponse ) trans.getResponse();
+//						} catch (ModbusIOException e) {
+//							// TODO Auto-generated catch block
+//							e.printStackTrace();
+//						} catch (ModbusSlaveException e) {
+//							// TODO Auto-generated catch block
+//							e.printStackTrace();
+//						} catch (ModbusException e) {
+//							// TODO Auto-generated catch block
+//							e.printStackTrace();
+//						}
+						// myMaches.add(new MyMaches(key, value, comment));
+					} else if (line.startsWith("! stop  !")) {
+						System.out.println("-=STOP=-");
+						try {
+//							con.open();
+							System.setProperty("net.wimpi.modbus.debug","true");
+							write_mreq = new WriteMultipleRegistersRequest();
+							write_mreq.setDataLength(WR_DA5XX_CC);
+							write_mreq.setReference(getValue("P001"));
+							write_mreq.setRegisters(out_registers);
+							write_mreq.setUnitID(unitid);
+							write_mreq.setHeadless();
+							// Preparing Transaction
+							System.out.println("Preparing Transaction….");
+							trans = new ModbusSerialTransaction(con);
+							trans.setRequest(write_mreq);
+							trans.setRetries(1);
+							// Execute Transaction
+							System.out.println("Executing Transaction….");
+							trans.execute();
+							System.out.println(" Sent Request: "
+									+ write_mreq.getHexMessage());
+							// Get Response
+							System.out.println(" Getting Response…. ");
+							write_mres = (WriteMultipleRegistersResponse) trans
+									.getResponse();
+							System.out
+									.println(" Response "
+											+ Integer.parseInt((write_mres
+													.getFunctionCode() + ""),
+													16) + " msg: "
+											+ write_mres.getHexMessage());
+							System.out.println("Transaction Completed.");
+							// Evaluate Response
+							System.out.println("Evaluating Response….");
+							if (write_mres.getFunctionCode() == 16) {
+								// res_flag = true;
+								System.out.println("Transaction Success!");
+							} else {
+								// res_flag = false;
+								System.out.println("Transaction Failed!");
+							}
+						} catch (Exception e) {
+							System.out
+									.println(" Error in Multiple Write Operation : "
+											+ e.getMessage());
+							e.printStackTrace();
+							// res_flag = false;
+							// respons_str = "exp" ;
+						}
+						// return res_flag;
+						// }
+					}
+					// }
+					else if (line.length() > 5)
 						System.out.println(line);
 
 				}

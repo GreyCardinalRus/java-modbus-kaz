@@ -81,7 +81,9 @@ public class ModbusRTUTransport extends ModbusSerialTransport {
 			}
 
 		} catch (Exception ex) {
+			//ex.printStackTrace();
 			throw new ModbusIOException("I/O failed to write");
+	
 		}
 
 	}// writeMessage
