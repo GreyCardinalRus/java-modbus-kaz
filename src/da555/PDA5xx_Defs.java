@@ -1,7 +1,6 @@
 package da555;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -10,26 +9,21 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.MatchResult;
-
 import jssc.SerialPort;
 import jssc.SerialPortList;
 import net.wimpi.modbus.Modbus;
-import net.wimpi.modbus.ModbusException;
-import net.wimpi.modbus.ModbusIOException;
-import net.wimpi.modbus.ModbusSlaveException;
 import net.wimpi.modbus.io.ModbusSerialTransaction;
 import net.wimpi.modbus.msg.DA555ReadID;
 import net.wimpi.modbus.msg.ModbusRequest;
 import net.wimpi.modbus.msg.ModbusResponse;
 import net.wimpi.modbus.msg.WriteMultipleRegistersRequest;
 import net.wimpi.modbus.msg.WriteMultipleRegistersResponse;
-import net.wimpi.modbus.msg.WriteSingleRegisterRequest;
-import net.wimpi.modbus.msg.WriteSingleRegisterResponse;
+//import net.wimpi.modbus.msg.WriteSingleRegisterRequest;
+//import net.wimpi.modbus.msg.WriteSingleRegisterResponse;
 import net.wimpi.modbus.net.SerialConnection;
 import net.wimpi.modbus.procimg.InputRegister;
 import net.wimpi.modbus.procimg.Register;
-import net.wimpi.modbus.procimg.SimpleProcessImage;
+//import net.wimpi.modbus.procimg.SimpleProcessImage;
 import net.wimpi.modbus.procimg.SimpleRegister;
 import net.wimpi.modbus.util.SerialParameters;
 
@@ -48,12 +42,12 @@ public class PDA5xx_Defs {
 	}
 
 	public static void main(String[] args) {
-//		System.setProperty("net.wimpi.modbus.debug","true");
+		System.setProperty("net.wimpi.modbus.debug","true"); // отладка
 		SerialConnection con = null;
 		ModbusSerialTransaction trans = null;
 		ModbusRequest req = null;
 		ModbusResponse rres = null;
-		SimpleProcessImage spi = null;
+//		SimpleProcessImage spi = null;
 		// Write Multiple Registers(Words)
 		WriteMultipleRegistersRequest write_mreq = null;
 		WriteMultipleRegistersResponse write_mres = null;
@@ -144,7 +138,7 @@ public class PDA5xx_Defs {
 				rres = trans.getResponse();
 				// System.out.println("Decode...");
 				InputRegister[] registers = rres.getRegisters();
-				int NCh = registers[0].toBytes()[0];
+//				int NCh = registers[0].toBytes()[0];
 				System.out
 						.println("NCh         = " + registers[0].toBytes()[0]);
 				System.out
@@ -197,9 +191,9 @@ public class PDA5xx_Defs {
 								&& line.indexOf("//") < (line.length() - 3))
 							comment = line.substring(line.indexOf("//"));
 						scanner.close();
-	//					System.out.println("Write fn=" + getValue(fnName)
-		//						+ " param=" + getValue(pName) + " value="
-			//					+ value + " comment=" + comment.substring(2));
+						System.out.println("Write fn=" + getValue(fnName)
+								+ " param=" + getValue(pName) + " value="
+								+ value + " comment=" + comment.substring(2));
 						out_registers[currRegNum++] = new SimpleRegister(value);
 //						WriteSingleRegisterRequest WriteReq = null; 
 //						WriteSingleRegisterResponse WriteRes = null;
@@ -238,7 +232,7 @@ public class PDA5xx_Defs {
 						System.out.println("-=STOP=-");
 						try {
 //							con.open();
-							System.setProperty("net.wimpi.modbus.debug","true");
+
 							write_mreq = new WriteMultipleRegistersRequest();
 							write_mreq.setDataLength(WR_DA5XX_CC);
 							write_mreq.setReference(getValue("P001"));
