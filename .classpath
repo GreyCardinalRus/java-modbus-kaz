@@ -8,5 +8,6 @@
 	<classpathentry kind="lib" path="lib/jfreechart-1.0.16.jar"/>
 	<classpathentry kind="lib" path="lib/jcommon-1.0.20.jar"/>
 	<classpathentry kind="lib" path="lib/jssc.jar"/>
+	<classpathentry kind="lib" path="lib/jdom-2.0.5.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<notebooks color="black" size="13.3">
+  <acer price="cheap" quality="normal" />
+  <asus price="normal" quality="normal">Asus Eee PC</asus>
+  <sony price="expensive" quality="good" />
+  <!--This is just comment!-->
+</notebooks>
