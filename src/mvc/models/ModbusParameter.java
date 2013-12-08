@@ -1,26 +1,44 @@
 package mvc.models;
 
-//import org.w3c.dom.Document;
-//import org.w3c.dom.NamedNodeMap;
-//import org.w3c.dom.Node;
-//import org.w3c.dom.NodeList;
-//import org.xml.sax.InputSource;
-//import org.xml.sax.SAXException;
-// 
-//import com.sun.org.apache.xerces.internal.parsers.DOMParser;
+import java.util.List;
+
+import org.jdom2.Attribute;
+import org.jdom2.DataConversionException;
+import org.jdom2.Element;
 
 public class ModbusParameter {
 	private int id=0;
-	private String fieldType;
+	private String fieldType="";
 	private String name = "";
 	private String description= "";
 	private String value="";
 	private String defaultValue="";
-	//private boolean boolValue;
 	private int minIntValue;
 	private int maxIntValue;
+	private String UoM;
+	private String Access;
+	private List<String> ListValues;
 	
-	
+	public ModbusParameter() {
+		
+	}
+	public ModbusParameter(Element param) {
+		List<Attribute> attrbts = param.getAttributes();
+		
+		for (int ia = 0; ia < attrbts.size(); ++ia) {
+			//System.out.print(" " + attrbts.get(ia).getName()
+			//		+ " = " + attrbts.get(ia).getValue());
+			if(attrbts.get(ia).getName()=="id")
+				try {
+					setId(param.getAttribute("id").getIntValue());
+				} catch (DataConversionException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			if(attrbts.get(ia).getName()=="Name") setName(param.getAttribute("Name").getValue());
+			if(attrbts.get(ia).getName()=="Description") setDescription(param.getAttribute("Description").getValue());
+		}
+	}
 	public String getFieldType() {
 		return fieldType;
 	}
@@ -96,6 +114,32 @@ public class ModbusParameter {
 
 	public void setDefaultValue(String defaultValue) {
 		this.defaultValue = defaultValue;
+	}
+
+	public String getUoM() {
+		return UoM;
+	}
+
+	public void setUoM(String uoM) {
+		UoM = uoM;
+	}
+
+	public String getAccess() {
+		return Access;
+	}
+
+	public void setAccess(String access) {
+		Access = access;
+	}
+
+	public List<String> getListValues() {
+		return ListValues;
+	}
+	public void setListValues(String Values) {
+		//ListValues = listValues;
+	}
+	public void setListValues(List<String> listValues) {
+		ListValues = listValues;
 	}
 
 }

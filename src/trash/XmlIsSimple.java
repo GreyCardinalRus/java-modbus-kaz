@@ -15,8 +15,7 @@ public class XmlIsSimple {
 			SAXBuilder parser = new SAXBuilder();
 			FileReader fr = new FileReader("modbusParameters.xml");
 			Document rDoc = parser.build(fr);
-			// System.out.println(rDoc.getRootElement().getName());
-			// System.out.println(rDoc.getRootElement().getAttributeValue("GroupName"));
+
 			List<Element> groups = rDoc.getRootElement().getChildren();
 			for (int ig = 0; ig < groups.size(); ++ig) {
 				// System.out.println(temp.get(i).getName());
