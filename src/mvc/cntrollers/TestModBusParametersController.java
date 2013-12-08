@@ -4,6 +4,8 @@ import java.io.FileReader;
 import java.util.List;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JSeparator;
 
 import org.jdom2.Attribute;
 import org.jdom2.Document;
@@ -12,6 +14,8 @@ import org.jdom2.input.SAXBuilder;
 
 import mvc.models.ModbusParameter;
 import mvc.models.ParameterForm;
+import javax.swing.JInternalFrame;
+import java.awt.BorderLayout;
 
 public class TestModBusParametersController {
 	JFrame panel;
@@ -23,13 +27,16 @@ public class TestModBusParametersController {
 	
 //				// TODO Auto-generated method stub
 		TestModBusParametersController controller = new TestModBusParametersController();
-	       controller.panel = new JFrame(); 
+	       JFrame frame = new JFrame();
+	       controller.panel = frame; 
+	       
 //		       PenFormView view = new PenFormView(controller.panel);
 		//
 		//
 		       controller.panel.setTitle("Super puper form");
 	       controller.panel.setBounds(100, 100, 700, 514);
 	       controller.panel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	       JPanel pPanel = new JPanel();
 //		       
 	   	try {
 			SAXBuilder parser = new SAXBuilder();
@@ -45,7 +52,7 @@ public class TestModBusParametersController {
 				for (int ic = 0; ic < params.size(); ++ic) {
 					Element param = params.get(ic);
 					// System.out.println(temp.get(i).getName());
-					ModbusParameter mbp=new ModbusParameter(param);
+					//ModbusParameter mbp=;
 					List<Attribute> attrbts = param.getAttributes();
 					
 					for (int ia = 0; ia < attrbts.size(); ++ia) {
@@ -53,11 +60,19 @@ public class TestModBusParametersController {
 								+ " = " + attrbts.get(ia).getValue());
 						}
 					
-				     ParameterForm pf = new ParameterForm(mbp);
-					  controller.panel.add(pf);
+				     //ParameterForm pf = ;
+					//controller.panel.add(new JSeparator());
+//					JInternalFrame internalFrame = new JInternalFrame("New JInternalFrame");
+//					frame.getContentPane().add(internalFrame, BorderLayout.NORTH);
+//					internalFrame.setVisible(true);
+//					
+//					internalFrame.getContentPane().add(new ParameterForm(new ModbusParameter(param)));
+					//controller.panel.getContentPane().add(new ParameterForm(new ModbusParameter(param),pPanel));
+					new ParameterForm(new ModbusParameter(param),pPanel);
 					System.out.println();
 				}
 				
+				controller.panel.getContentPane().add(pPanel);	
 			}
 		} catch (Exception ex) {
 			// file not exist!
