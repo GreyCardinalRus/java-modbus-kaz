@@ -13,20 +13,22 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.JSeparator;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
-public class ParameterForm //extends JPanel 
+public class ParameterForm extends JPanel 
 {
 	/**
 	 * 
 	 */
 //	private static final long serialVersionUID = 2660363798598403037L;
 	private JLabel label_Access;
-	private JPanel panel;
+	//private JPanel panel;
     ModbusParameter  modbusParameter=null;
 	/**
 	 * Create the panel.
 	 */
 	public ParameterForm( ModbusParameter  mbp, JPanel panelParient) {
-		panel =panelParient;// new JPanel();
+	//	panel =panelParient;
+		//if(null==panel) 
+	//		panel =new JPanel();
 		modbusParameter=mbp;
 		label_Access = new JLabel(mbp.getAccess());
 		label_Access.setHorizontalAlignment(SwingConstants.LEFT);
@@ -46,7 +48,7 @@ public class ParameterForm //extends JPanel
 		slider_Value.setValue(23);
 		
 		JSeparator separator = new JSeparator();
-		GroupLayout groupLayout = new GroupLayout(panel);
+		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
@@ -101,7 +103,7 @@ public class ParameterForm //extends JPanel
 					.addComponent(separator, GroupLayout.PREFERRED_SIZE, 2, GroupLayout.PREFERRED_SIZE)
 					.addGap(18))
 		);
-		panel.setLayout(groupLayout);
+		this.setLayout(groupLayout);
 
 	}
 }

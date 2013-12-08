@@ -16,6 +16,8 @@ import mvc.models.ModbusParameter;
 import mvc.models.ParameterForm;
 import javax.swing.JInternalFrame;
 import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.GridLayout;
 
 public class TestModBusParametersController {
 	JFrame panel;
@@ -37,6 +39,8 @@ public class TestModBusParametersController {
 	       controller.panel.setBounds(100, 100, 700, 514);
 	       controller.panel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	       JPanel pPanel = new JPanel();
+	       Container c = controller.panel.getContentPane();
+	       c.setLayout(new GridLayout(16,1));
 //		       
 	   	try {
 			SAXBuilder parser = new SAXBuilder();
@@ -67,8 +71,8 @@ public class TestModBusParametersController {
 //					internalFrame.setVisible(true);
 //					
 //					internalFrame.getContentPane().add(new ParameterForm(new ModbusParameter(param)));
-					//controller.panel.getContentPane().add(new ParameterForm(new ModbusParameter(param),pPanel));
-					new ParameterForm(new ModbusParameter(param),pPanel);
+					c.add(new ParameterForm(new ModbusParameter(param),pPanel));
+					//new ParameterForm(new ModbusParameter(param),pPanel);
 					System.out.println();
 				}
 				
