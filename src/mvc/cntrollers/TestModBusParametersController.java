@@ -18,6 +18,7 @@ import javax.swing.JInternalFrame;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.GridLayout;
+import javax.swing.JScrollBar;
 
 public class TestModBusParametersController {
 	JFrame panel;
@@ -31,11 +32,12 @@ public class TestModBusParametersController {
 		TestModBusParametersController controller = new TestModBusParametersController();
 	       JFrame frame = new JFrame();
 	       controller.panel = frame; 
+	       frame.getContentPane().setLayout(new GridLayout(0, 1, 0, 0));
 	       
 //		       PenFormView view = new PenFormView(controller.panel);
 		//
 		//
-		       controller.panel.setTitle("Super puper form");
+		   controller.panel.setTitle("Super puper form");
 	       controller.panel.setBounds(100, 100, 700, 514);
 	       controller.panel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	       JPanel pPanel = new JPanel();
