@@ -10,10 +10,13 @@ package mvc.models;
 //import com.sun.org.apache.xerces.internal.parsers.DOMParser;
 
 public class ModbusParameter {
-	private int numberParam=0;
+	private int id=0;
 	private String fieldType;
-	private int intValue;
-	private boolean boolValue;
+	private String name = "";
+	private String description= "";
+	private String value="";
+	private String defaultValue="";
+	//private boolean boolValue;
 	private int minIntValue;
 	private int maxIntValue;
 	
@@ -23,27 +26,33 @@ public class ModbusParameter {
 	}
 
 	public boolean setFieldType(String fieldType) {
-		if(fieldType!="int"&&fieldType!="boolean") return false; 
+		if(fieldType!="Integer"&&fieldType!="Boolean"&&fieldType!="String") return false; 
 		this.fieldType = fieldType; return true;
 	}
 
 	public boolean SetValue(int newValue){
 		if(fieldType!="int"||newValue<minIntValue||newValue>maxIntValue)
 			return false;
-		intValue= newValue;
+		value= ""+newValue;
+		return true;
+	}
+	public boolean SetDefaultValue(int newValue){
+		if(fieldType!="int"||newValue<minIntValue||newValue>maxIntValue)
+			return false;
+		setDefaultValue(""+newValue);
 		return true;
 	}
 	public boolean SetValue(Boolean newValue){
 		if(fieldType!="boolean")
 			return false;
-		boolValue= newValue;
+		value= (newValue?"True":"false");
 		return true;
 	}
 	public boolean GetBooleanValue() {
-		return boolValue;
+		return (value=="True"?true:false);
 	}
 	public int GetIntValue() {
-		return intValue;
+		return Integer.parseInt(value);
 	}
 	/**
 	 * @param args
@@ -53,16 +62,40 @@ public class ModbusParameter {
 
 	}
 
-	public int getNumberParam() {
-		return numberParam;
+	public int getId() {
+		return id;
 	}
 
-	public void setNumberParam(int numberParam) {
-		this.numberParam = numberParam;
+	public void setId(int id) {
+		this.id = id;
 	}
 	public boolean readFromFile(String Filename) {
 		
 		return true;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getDefaultValue() {
+		return defaultValue;
+	}
+
+	public void setDefaultValue(String defaultValue) {
+		this.defaultValue = defaultValue;
 	}
 
 }

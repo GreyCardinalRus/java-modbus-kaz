@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ModBusParameters>
+  <!--This is just comment!-->
+  <pInt GroupName="Основные- пусть будут целые тут">
+    <P.000 id="0" Name="Vorona_0" Description="Описание параметра 0" ParamType="Integer" MinValue="0" MaxValue="100" defaultValue="5" UoM="V" Access="RW" />
+    <P.001 id="1" Name="Vorona_1" Description="Описание параметра 1" ParamType="Integer" MinValue="0" MaxValue="100" defaultValue="5" UoM="V" Access="RW" />
+    <P.002 id="2" Name="Vorona_2" Description="Описание параметра 2" ParamType="Integer" MinValue="0" MaxValue="100" defaultValue="5" UoM="V" Access="RW" />
+    <P.003 id="3" Name="Vorona_3" Description="Описание параметра 3" ParamType="Integer" MinValue="0" MaxValue="100" defaultValue="5" UoM="V" Access="RW" />
+    <P.004 id="4" Name="Vorona_4" Description="Описание параметра 4" ParamType="Integer" MinValue="0" MaxValue="100" defaultValue="5" UoM="V" Access="RW" />
+  </pInt>
+  <!--Тут будут булевые!!-->
+  <pBool GroupName="Основные- пусть будут логические тут">
+    <P.005 id="5" Name="Vorona_5" Description="Описание параметра 5" ParamType="Boolean" defaultValue="False" Access="RW" ListValues="Ложь, Истина" />
+    <P.006 id="6" Name="Vorona_6" Description="Описание параметра 6" ParamType="Boolean" defaultValue="False" Access="RW" ListValues="Ложь, Истина" />
+    <P.007 id="7" Name="Vorona_7" Description="Описание параметра 7" ParamType="Boolean" defaultValue="False" Access="RW" ListValues="Ложь, Истина" />
+    <P.008 id="8" Name="Vorona_8" Description="Описание параметра 8" ParamType="Boolean" defaultValue="False" Access="RW" ListValues="Ложь, Истина" />
+    <P.009 id="9" Name="Vorona_9" Description="Описание параметра 9" ParamType="Boolean" defaultValue="False" Access="RW" ListValues="Ложь, Истина" />
+  </pBool>
+  <!--Тут будут строковые!!-->
+  <pString GroupName="Основные- пусть будут строковые тут">
+    <P.010 id="10" Name="Vorona_10" Description="Описание параметра 10" ParamType="String" defaultValue="" Access="RW" ListValues="" />
+    <P.011 id="11" Name="Vorona_11" Description="Описание параметра 11" ParamType="String" defaultValue="" Access="RW" ListValues="" />
+    <P.012 id="12" Name="Vorona_12" Description="Описание параметра 12" ParamType="String" defaultValue="" Access="RW" ListValues="" />
+    <P.013 id="13" Name="Vorona_13" Description="Описание параметра 13" ParamType="String" defaultValue="" Access="RW" ListValues="" />
+    <P.014 id="14" Name="Vorona_14" Description="Описание параметра 14" ParamType="String" defaultValue="" Access="RW" ListValues="" />
+  </pString>
+</ModBusParameters>
