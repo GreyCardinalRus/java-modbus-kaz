@@ -37,6 +37,11 @@ public class ModbusParameter {
 				}
 			if(attrbts.get(ia).getName()=="Name") setName(param.getAttribute("Name").getValue());
 			if(attrbts.get(ia).getName()=="Description") setDescription(param.getAttribute("Description").getValue());
+			if(attrbts.get(ia).getName()=="Access") setAccess(param.getAttribute("Access").getValue());
+			if(attrbts.get(ia).getName()=="UoM") setUoM(param.getAttribute("UoM").getValue());
+			if(attrbts.get(ia).getName()=="ParamType") setFieldType(param.getAttribute("ParamType").getValue());
+			if(attrbts.get(ia).getName()=="defaultValue") setDefaultValue(param.getAttribute("defaultValue").getValue());
+			
 		}
 	}
 	public String getFieldType() {
@@ -44,7 +49,9 @@ public class ModbusParameter {
 	}
 
 	public boolean setFieldType(String fieldType) {
-		if(fieldType!="Integer"&&fieldType!="Boolean"&&fieldType!="String") return false; 
+		//System.out.println("pt="+fieldType);
+		if(!fieldType.equals("Integer")&&!fieldType.equals("Boolean")&&!fieldType.equals("String")) return false; 
+		//System.out.println("set pt="+fieldType);
 		this.fieldType = fieldType; return true;
 	}
 

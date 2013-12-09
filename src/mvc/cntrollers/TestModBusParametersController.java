@@ -1,6 +1,8 @@
 package mvc.cntrollers;
 
+import java.io.FileInputStream;
 import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.util.List;
 
 import javax.swing.JFrame;
@@ -42,11 +44,13 @@ public class TestModBusParametersController {
 	       controller.panel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	       JPanel pPanel = new JPanel();
 	       Container c = controller.panel.getContentPane();
-	       c.setLayout(new GridLayout(16,1));
+	       c.setLayout(new GridLayout(10,1));
 //		       
 	   	try {
 			SAXBuilder parser = new SAXBuilder();
-			FileReader fr = new FileReader("modbusParameters.xml");
+			InputStreamReader fr = new InputStreamReader(new FileInputStream("modbusParameters.xml"), "UTF-8");
+			//FileReader fr = new FileReader("modbusParameters.xml");
+			//System.out.println(fr.getEncoding());
 			Document rDoc = parser.build(fr);
 
 			List<Element> groups = rDoc.getRootElement().getChildren();

@@ -47,7 +47,7 @@ public class XmlIsSimple {
 				"Основные- пусть будут целые тут");
 		rootElement.addContent(groopElement);
         int offSet = 0;
-		for (int IdParam = 0; IdParam < 5; IdParam++) {
+		for (int IdParam = 0; IdParam < 3; IdParam++) {
 			Element elParameter = new Element("P." + nf3.format(offSet));
 			elParameter.setAttribute("id", "" + offSet);
 			elParameter.setAttribute("Name", "Vorona_" + offSet);
@@ -72,7 +72,7 @@ public class XmlIsSimple {
 				"Основные- пусть будут логические тут");
 		rootElement.addContent(groopElement);
 
-		for (int IdParam = 0; IdParam < 5; IdParam++) {
+		for (int IdParam = 0; IdParam < 3; IdParam++) {
 			Element elParameter = new Element("P." + nf3.format(offSet));
 			elParameter.setAttribute("id", "" + offSet);
 			elParameter.setAttribute("Name", "Vorona_" + offSet);
@@ -97,7 +97,7 @@ public class XmlIsSimple {
 				"Основные- пусть будут строковые тут");
 		rootElement.addContent(groopElement);
 
-		for (int IdParam = 0; IdParam < 5; IdParam++) {
+		for (int IdParam = 0; IdParam < 3; IdParam++) {
 			Element elParameter = new Element("P." + nf3.format(offSet));
 			elParameter.setAttribute("id", "" + offSet);
 			elParameter.setAttribute("Name", "Vorona_" + offSet);
@@ -106,10 +106,10 @@ public class XmlIsSimple {
 			elParameter.setAttribute("ParamType", "String");
 			//elParameter.setAttribute("MinValue", "0");
 			//elParameter.setAttribute("MaxValue", "100");
-			elParameter.setAttribute("defaultValue", "");
+			elParameter.setAttribute("defaultValue", "Выбор2");
 			//elParameter.setAttribute("UoM", "V");
 			elParameter.setAttribute("Access", "RW");
-			elParameter.setAttribute("ListValues", "");
+			elParameter.setAttribute("ListValues", "Выбор1,Выбор2,Выбор3");
 			// elAsus.addContent("Asus Eee PC");
 			groopElement.addContent(elParameter);
 			offSet++;
