@@ -30,9 +30,12 @@ public class ParameterForm extends JPanel {
 	 */
 	public ParameterForm(ModbusParameter mbp, JPanel panelParient) {
 		//BooleanParameterForm( mbp,  panelParient);
+		//StringParameterForm( mbp,  panelParient);
 		if (mbp.getFieldType().equals("Integer")) {IntegerParameterForm( mbp,  panelParient);}
 		if (mbp.getFieldType().equals("Boolean")) {BooleanParameterForm( mbp,  panelParient);}
-		if (mbp.getFieldType().equals("String")) {StringParameterForm( mbp,  panelParient);}
+		if (mbp.getFieldType().equals("String")
+				||mbp.getFieldType().equals("Integer")&&!mbp.ListValuesEmpty()
+				) {StringParameterForm( mbp,  panelParient);}
 	}
 	
 
@@ -199,8 +202,9 @@ public class ParameterForm extends JPanel {
 		JSeparator separator = new JSeparator();
 		
 		JRadioButton rdbtnNewRadioButton = new JRadioButton("False");
-		
+		if(!mbp.ListValuesEmpty())  rdbtnNewRadioButton.setText(mbp.getListValues().get(0));
 		JRadioButton rdbtnNewRadioButton_1 = new JRadioButton("True");
+		if(!mbp.ListValuesEmpty()&&mbp.getListValues().size()>1)  rdbtnNewRadioButton_1.setText(mbp.getListValues().get(1));
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.TRAILING)
@@ -272,8 +276,11 @@ public class ParameterForm extends JPanel {
 		JSeparator separator = new JSeparator();
 		
 		JComboBox comboBox = new JComboBox();
-		comboBox.addItem("v1");
-		comboBox.addItem("v2");
+		for (int i = 0; i < mbp.getListValues().size(); i++) {
+			comboBox.addItem(mbp.getListValues().get(i));
+		}
+		//comboBox.addItem("v1");
+		//comboBox.addItem("v2");
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.TRAILING)
@@ -285,12 +292,12 @@ public class ParameterForm extends JPanel {
 					.addGap(10)
 					.addComponent(lblNameparameterVery, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 61, GroupLayout.PREFERRED_SIZE)
+					.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 119, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(label_UoM)
-					.addGap(10)
+					.addComponent(label_UoM, GroupLayout.PREFERRED_SIZE, 44, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(button_default)
-					.addGap(48))
+					.addGap(21))
 				.addGroup(groupLayout.createSequentialGroup()
 					.addGap(31)
 					.addComponent(separator, GroupLayout.DEFAULT_SIZE, 449, Short.MAX_VALUE)
@@ -313,11 +320,10 @@ public class ParameterForm extends JPanel {
 								.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 							.addGap(13))
 						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(label_UoM)
-							.addGap(11))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(button_default)
-							.addGap(7)))
+							.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+								.addComponent(button_default)
+								.addComponent(label_UoM))
+							.addGap(11)))
 					.addGap(22)
 					.addComponent(separator, GroupLayout.PREFERRED_SIZE, 2, GroupLayout.PREFERRED_SIZE)
 					.addGap(18))

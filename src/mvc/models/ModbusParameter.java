@@ -1,6 +1,8 @@
 package mvc.models;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import org.jdom2.Attribute;
 import org.jdom2.DataConversionException;
@@ -17,11 +19,10 @@ public class ModbusParameter {
 	private int maxIntValue;
 	private String UoM;
 	private String Access;
-	private List<String> ListValues;
+	private List<String> ListValues=  new ArrayList<String>();;
 	
 	public ModbusParameter() {
-		
-	}
+			}
 	public ModbusParameter(Element param) {
 		List<Attribute> attrbts = param.getAttributes();
 		
@@ -41,6 +42,9 @@ public class ModbusParameter {
 			if(attrbts.get(ia).getName()=="UoM") setUoM(param.getAttribute("UoM").getValue());
 			if(attrbts.get(ia).getName()=="ParamType") setFieldType(param.getAttribute("ParamType").getValue());
 			if(attrbts.get(ia).getName()=="defaultValue") setDefaultValue(param.getAttribute("defaultValue").getValue());
+			if(attrbts.get(ia).getName()=="ListValues"){
+				setListValues(param.getAttribute("ListValues").getValue());
+			}
 			
 		}
 	}
@@ -142,11 +146,28 @@ public class ModbusParameter {
 	public List<String> getListValues() {
 		return ListValues;
 	}
+	public boolean ListValuesEmpty() {
+		return null==ListValues || ListValues.size()==0;//true;// ListValues.isEmpty();
+	}
+
 	public void setListValues(String Values) {
-		//ListValues = listValues;
+		//String s = "Строка, которую мы хотим разобрать на слова"; 
+
+		StringTokenizer st = new StringTokenizer(Values, " \t\n\r,."); 
+
+		while(st.hasMoreTokens()){
+
+			ListValues.add(st.nextToken());
+
+	//	System.out.println(ListValues.get(ListValues.size()-1)) ; 
+
+		}
+
+	//ListValues = listValues;
 	}
 	public void setListValues(List<String> listValues) {
 		ListValues = listValues;
 	}
+
 
 }

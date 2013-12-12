@@ -70,15 +70,8 @@ public class TestModBusParametersController {
 								+ " = " + attrbts.get(ia).getValue());
 						}
 					
-				     //ParameterForm pf = ;
-					//controller.panel.add(new JSeparator());
-//					JInternalFrame internalFrame = new JInternalFrame("New JInternalFrame");
-//					frame.getContentPane().add(internalFrame, BorderLayout.NORTH);
-//					internalFrame.setVisible(true);
-//					
-//					internalFrame.getContentPane().add(new ParameterForm(new ModbusParameter(param)));
 					c.add(new ParameterForm(new ModbusParameter(param),pPanel));
-					//new ParameterForm(new ModbusParameter(param),pPanel);
+
 					System.out.println();
 				}
 				
