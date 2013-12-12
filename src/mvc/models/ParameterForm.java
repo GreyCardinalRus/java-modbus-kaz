@@ -1,5 +1,7 @@
 package mvc.models;
 
+import java.awt.Component;
+
 import mvc.models.*;
 
 import javax.swing.JPanel;
@@ -15,6 +17,9 @@ import javax.swing.JSeparator;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JComboBox;
 import javax.swing.JRadioButton;
+import javax.swing.JTextField;
+
+//import org.omg.CORBA.Object;
 
 public class ParameterForm extends JPanel {
 	/**
@@ -24,6 +29,8 @@ public class ParameterForm extends JPanel {
 	private JLabel label_Access;
 	// private JPanel panel;
 	ModbusParameter modbusParameter = null;
+	//private JTextField textField;
+	private Component comboBox;
 
 	/**
 	 * Create the panel.
@@ -275,12 +282,18 @@ public class ParameterForm extends JPanel {
 
 		JSeparator separator = new JSeparator();
 		
-		JComboBox comboBox = new JComboBox();
-		for (int i = 0; i < mbp.getListValues().size(); i++) {
-			comboBox.addItem(mbp.getListValues().get(i));
+		if(mbp.ListValuesEmpty()){
+			
+			  comboBox = new JTextField();
+			((JTextField)comboBox).setColumns(10);
 		}
-		//comboBox.addItem("v1");
-		//comboBox.addItem("v2");
+		else{
+		 comboBox = new JComboBox();
+		for (int i = 0; i < mbp.getListValues().size(); i++) {
+			((JComboBox)comboBox).addItem(mbp.getListValues().get(i));
+		}
+		}
+
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.TRAILING)
@@ -291,40 +304,47 @@ public class ParameterForm extends JPanel {
 					.addComponent(label_ID)
 					.addGap(10)
 					.addComponent(lblNameparameterVery, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 119, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGap(13)
+					.addComponent( comboBox, GroupLayout.PREFERRED_SIZE, 119, GroupLayout.PREFERRED_SIZE)
+					.addGap(11)
 					.addComponent(label_UoM, GroupLayout.PREFERRED_SIZE, 44, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(button_default)
 					.addGap(21))
 				.addGroup(groupLayout.createSequentialGroup()
 					.addGap(31)
-					.addComponent(separator, GroupLayout.DEFAULT_SIZE, 449, Short.MAX_VALUE)
+					.addComponent(separator, GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE)
 					.addGap(37))
+				
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap(13, Short.MAX_VALUE)
-					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(label_Access)
-							.addGap(13))
+							.addContainerGap(13, Short.MAX_VALUE)
+							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
+								.addGroup(groupLayout.createSequentialGroup()
+									.addComponent(label_Access)
+									.addGap(13))
+								.addGroup(groupLayout.createSequentialGroup()
+									.addComponent(label_ID)
+									.addGap(13))
+								.addGroup(groupLayout.createSequentialGroup()
+									.addComponent(lblNameparameterVery)
+									.addGap(13))
+								.addGroup(groupLayout.createSequentialGroup()
+									.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+										.addComponent(button_default)
+										.addComponent(label_UoM))
+									.addGap(11)))
+							.addGap(22))
 						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(label_ID)
-							.addGap(13))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblNameparameterVery)
-								.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addGap(13))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(button_default)
-								.addComponent(label_UoM))
-							.addGap(11)))
-					.addGap(22)
+							.addGap(13)
+							.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addGap(12)
+							
+							.addGap(4)))
 					.addComponent(separator, GroupLayout.PREFERRED_SIZE, 2, GroupLayout.PREFERRED_SIZE)
 					.addGap(18))
 		);
