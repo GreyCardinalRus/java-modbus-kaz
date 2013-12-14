@@ -3,8 +3,8 @@
   <!--This is just comment!-->
   <pInt GroupName="Основные- пусть будут целые тут">
     <P.000 id="0" Name="Vorona_0" Description="Описание параметра 0 целые" ParamType="Integer" MinValue="0" MaxValue="100" defaultValue="5" UoM="V" Access="R" />
-    <P.001 id="1" Name="Vorona_1" Description="Описание параметра 1 целые" ParamType="Integer" MinValue="0" MaxValue="100" defaultValue="5" UoM="V" Access="W" />
-    <P.002 id="2" Name="Vorona_2" Description="Описание параметра 2 целые" ParamType="Integer" MinValue="0" MaxValue="3" defaultValue="2" UoM="V" Access="RW" ListValues="Целое0,Целое1,Целое2,Целое3" />
+    <P.001 id="1" Name="Vorona_1" Description="Описание параметра 1 целые" ParamType="Integer" MinValue="0" MaxValue="100" defaultValue="5" UoM="%" Access="W" />
+    <P.002 id="2" Name="Vorona_2" Description="Описание параметра 2 целые" ParamType="Integer" MinValue="0" MaxValue="3" defaultValue="2" UoM="A" Access="RW" ListValues="Целое 0,Целое 1,Целое 2,Целое 3" />
   </pInt>
   <!--Тут будут булевые!!-->
   <pBool GroupName="Основные- пусть будут логические тут">
